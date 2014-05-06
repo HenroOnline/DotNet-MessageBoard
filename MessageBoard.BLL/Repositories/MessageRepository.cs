@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MessageBoard.BLL.Repositories
 {
-	public class BoardRepository : BaseRepository<Board, BoardRepository>
+	public class MessageRepository : BaseRepository<Message, MessageRepository>
 	{
-		public Board SelectByKey(string key)
+		public List<Message> ListBySlide(int slideId)
 		{
-			return Context.Boards.FirstOrDefault(b => b.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase));
+			return Context.Messages.Where(m => m.Slide.Id == slideId).ToList();
 		}
 	}
 }

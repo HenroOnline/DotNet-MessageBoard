@@ -6,9 +6,11 @@
 	<title>MessageBoard</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
-
+	<script>
+		setTimeout(function () { location.href = location.href }, 60000);
+	</script>
 </head>
 <body>
-@RenderBody()	
+	@RenderBody()
 </body>
 </html>

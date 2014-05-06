@@ -1,5 +1,6 @@
 ﻿using MessageBoard.BLL.Repositories;
 using MessageBoard.DAL;
+using MessageBoard.Web.Display.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +11,14 @@ namespace MessageBoard.Web.Display.Controllers
 {
 	public class HomeController : Controller
 	{
-		public ActionResult Index()
+		public ActionResult Index(string key)
 		{
-			var a = BoardRepository.Instance.List();
+			key = "Main";
+			var board = BoardRepository.Instance.SelectByKey(key);
+			var slide = SlideRepository.Instance.ListByBoard(board.Id).FirstOrDefault();
+			var messages = MessageRepository.Instance.ListBySlide(slide.Id);
 
-			return View();
-		}
-
-		public ActionResult About()
-		{
-			ViewBag.Message = "Your application description page.";
-
-			return View();
-		}
-
-		public ActionResult Contact()
-		{
-			ViewBag.Message = "Your contact page.";
-
-			return View();
+			return View(new SlideModel(slide, messages));
 		}
 	}
 }

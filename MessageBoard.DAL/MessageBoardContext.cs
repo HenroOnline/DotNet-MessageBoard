@@ -25,6 +25,7 @@ namespace MessageBoard.DAL
 		public DbSet<Board> Boards { get; set; }
 		public DbSet<Slide> Slides { get; set; }
 		public DbSet<BoardSlide> BoardSlides { get; set; }
+		public DbSet<Message> Messages { get; set; }
 
 		private static MessageBoardContext _instance;
 		public static MessageBoardContext Instance
@@ -67,7 +68,7 @@ namespace MessageBoard.DAL
 				MessageBoardContext.SchemaName = ConfigurationManager.AppSettings["SchemaName"];
 			}
 
-			this.Configuration.LazyLoadingEnabled = false;
+			this.Configuration.LazyLoadingEnabled = true;
 		}
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -18,6 +18,8 @@ namespace MessageBoard.DAL.Entity
 
 		public int Height { get; set; }
 
+		public Slide Slide { get; set; }
+
 		public List<Setting> Settings { get; set; }
 	}
 }
