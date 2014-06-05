@@ -1,0 +1,16 @@
+﻿<div class="row">	
+	<div class="col-sm-12">
+		<div class="list-group">
+			@foreach (var b in Model.Boards)
+			{
+				<a href="~/Board/Detail/@b.Id" class="list-group-item">
+				<h4 class="list-group-item-heading">@b.Key</h4>
+				<p class="list-group-item-text">@b.Description</p>
+			</a>
+			}			
+		</div>
+	</div><!-- /.col-sm-12 -->
+</div>
+<p>
+	<a href="~/Board/Detail/" class="btn btn-primary" role="button">Scherm toevoegen</a>	
+</p>

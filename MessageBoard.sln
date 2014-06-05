@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBoard.Web.Display", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBoard.BLL", "MessageBoard.BLL\MessageBoard.BLL.csproj", "{4EFBB825-2236-4794-BEAA-52E53B47DAA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBoard.Web.Management", "MessageBoard.Web.Management\MessageBoard.Web.Management.csproj", "{299DB3BF-5A77-4C9D-8B59-48E0335EDBDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4EFBB825-2236-4794-BEAA-52E53B47DAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EFBB825-2236-4794-BEAA-52E53B47DAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EFBB825-2236-4794-BEAA-52E53B47DAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{299DB3BF-5A77-4C9D-8B59-48E0335EDBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{299DB3BF-5A77-4C9D-8B59-48E0335EDBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{299DB3BF-5A77-4C9D-8B59-48E0335EDBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{299DB3BF-5A77-4C9D-8B59-48E0335EDBDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

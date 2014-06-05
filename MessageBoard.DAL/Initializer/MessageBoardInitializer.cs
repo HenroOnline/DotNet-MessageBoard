@@ -30,7 +30,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 0,
 							PositionY = 0,
 							Width = 4,
-							Height = 5
+							Height = 5,
+							MessageKind = "InformationText"
 						},
 
 						new Message
@@ -39,7 +40,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 4,
 							PositionY = 0,
 							Width = 4,
-							Height = 6
+							Height = 6,
+							MessageKind = "InformationText"
 						},
 
 						new Message
@@ -48,7 +50,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 0,
 							PositionY = 5,
 							Width = 4,
-							Height = 1
+							Height = 1,
+							MessageKind = "InformationText"
 						},
 
 						new Message
@@ -57,7 +60,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 0,
 							PositionY = 6,
 							Width = 16,
-							Height = 1
+							Height = 1,
+							MessageKind = "InformationText"
 						},
 
 						new Message
@@ -66,7 +70,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 0,
 							PositionY = 7,
 							Width = 16,
-							Height = 1
+							Height = 1,
+							MessageKind = "InformationText"
 						},
 
 						new Message
@@ -75,7 +80,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 0,
 							PositionY = 8,
 							Width = 8,
-							Height = 1
+							Height = 1,
+							MessageKind = "InformationText"
 						},
 
 						new Message
@@ -84,7 +90,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 8,
 							PositionY = 8,
 							Width = 8,
-							Height = 1
+							Height = 1,
+							MessageKind = "InformationText"
 						},
 						new Message
 						{
@@ -92,7 +99,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 12,
 							PositionY = 3,
 							Width = 4,
-							Height = 3
+							Height = 3,
+							MessageKind = "InformationText"
 						},
 						new Message
 						{
@@ -100,7 +108,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 8,
 							PositionY = 0,
 							Width = 8,
-							Height = 3
+							Height = 3,
+							MessageKind = "InformationText"
 						},
 						new Message
 						{
@@ -108,7 +117,8 @@ namespace MessageBoard.DAL.Initializer
 							PositionX = 8,
 							PositionY = 3,
 							Width = 4,
-							Height = 3
+							Height = 3,
+							MessageKind = "InformationText"
 						}						
 					}
 				});
@@ -126,7 +136,8 @@ namespace MessageBoard.DAL.Initializer
 						PositionX = 0,
 						PositionY = 0,
 						Width = 4,
-						Height = 5
+						Height = 5,
+						MessageKind = "InformationText"
 					},
 
 					new Message
@@ -135,7 +146,8 @@ namespace MessageBoard.DAL.Initializer
 						PositionX = 4,
 						PositionY = 0,
 						Width = 4,
-						Height = 6
+						Height = 6,
+						MessageKind = "InformationText"
 					}
 				}
 			});

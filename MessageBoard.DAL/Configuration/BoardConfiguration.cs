@@ -16,6 +16,9 @@ namespace MessageBoard.DAL.Configuration
 				this.ToTable("Board", MessageBoardContext.SchemaName);
 			}
 
+			this.Property(b => b.Key).HasMaxLength(150)
+															 .IsRequired();
+
 			this.Property(b => b.Description).HasMaxLength(150)
 																			 .IsRequired();			
 		}

@@ -23,6 +23,8 @@ namespace MessageBoard.DAL.Configuration
 			this.Property(m => m.PositionY).IsRequired();
 			this.Property(m => m.Width).IsRequired();
 			this.Property(m => m.Height).IsRequired();
+			this.Property(m => m.MessageKind).HasMaxLength(150)
+																			 .IsRequired();
 		}
 	}
 }

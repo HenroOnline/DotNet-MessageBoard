@@ -1,0 +1,34 @@
+﻿@model MessageBoard.Web.Management.Models.Board.DetailViewModel
+
+<script>
+	$(function () {
+		$("button[value=delete]").click(function () {
+			return messageBoard.interaction.confirm("Weet u zeker dat u dit scherm wilt verwijderen?");
+		});
+	});
+</script>
+
+@using (Html.BeginForm("Detail", "Board", FormMethod.Post))
+{
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.Board.Id)
+	<div class="input-group">
+		@Html.LabelFor(m => m.Board.Key)
+		@Html.TextBoxFor(m => m.Board.Key, new { @class = "form-control", placeholder = "Sleutel", autofocus = "autofocus" })
+	</div>
+	<br/>
+	<div class="input-group">
+		@Html.LabelFor(m => m.Board.Description)
+		@Html.TextAreaFor(m => m.Board.Description, new { @class = "form-control", placeholder = "Omschrijving" })
+	</div>
+	<br/>
+	@Html.ValidationSummary(false)
+	<p>
+		<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>		
+		<a href="~/Board/" class="btn btn-warning" role="button">Annuleren</a>
+		@if(Model.Board.Id != 0)
+		{ 
+			<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>
+		}
+	</p>
+}

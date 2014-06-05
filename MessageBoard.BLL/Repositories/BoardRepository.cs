@@ -11,7 +11,13 @@ namespace MessageBoard.BLL.Repositories
 	{
 		public Board SelectByKey(string key)
 		{
-			return Context.Boards.FirstOrDefault(b => b.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase));
+			return Context.Boards.FirstOrDefault(b => b.ModifiedKind != "D" && b.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase));
+		}
+
+		public List<Board> ListOrderedByDescription()
+		{
+			return Context.Boards.Where(b => b.ModifiedKind != "D")
+													 .OrderBy(b => b.Description).ToList();
 		}
 	}
 }

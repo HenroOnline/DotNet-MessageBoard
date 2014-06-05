@@ -70,8 +70,10 @@ namespace MessageBoard.BLL.Repositories
 		{
 			if (entity.ModifiedKind != "D")
 			{
-				entity.ModifiedKind = "D";
+				entity.ModifiedKind = "D";		
 			}
+
+			Context.SaveChanges();
 		}
 
 		/*
