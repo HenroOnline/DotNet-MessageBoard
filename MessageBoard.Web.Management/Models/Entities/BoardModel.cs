@@ -9,7 +9,6 @@ namespace MessageBoard.Web.Management.Models.Entities
 {
 	public class BoardModel : IValidatableObject
 	{
-
 		public int Id { get; set; }
 
 		[Required(ErrorMessage = "{0} is verplicht")]
@@ -22,17 +21,19 @@ namespace MessageBoard.Web.Management.Models.Entities
 		[Display(Name = "Omschrijving")]
 		public string Description { get; set; }
 
-		public BoardModel() : this(null) { }
-		public BoardModel(DAL.Entity.Board board)
+		public static BoardModel Create(DAL.Entity.Board board)
 		{
+			var result = new BoardModel();
 			if (board == null)
 			{
-				return;
+				return result;
 			}
 
-			Id = board.Id;
-			Key = board.Key;
-			Description = board.Description;
+			result.Id = board.Id;
+			result.Key = board.Key;
+			result.Description = board.Description;
+
+			return result;
 		}
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -41,8 +42,7 @@ namespace MessageBoard.Web.Management.Models.Entities
 			var result = new List<ValidationResult>();
 
 			if (dbBoard != null && dbBoard.Id != Id)
-			{				
-
+			{
 				result.Add(new ValidationResult("Sleutel is al in gebruik!", new List<string> { "Key" } ));
 			}
 

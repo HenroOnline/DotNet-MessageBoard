@@ -20,137 +20,59 @@ namespace MessageBoard.DAL.Initializer
 			slides.Add(new Slide
 				{
 					Description = "Slide 1",
-					Columns = 16,
-					Rows = 9,
-					Messages = new List<Message>()
+					Layers = new List<Layer>()
 					{
-						new Message
+						new Layer()
 						{
-							Description = "Bericht 1",
-							PositionX = 0,
-							PositionY = 0,
-							Width = 4,
-							Height = 5,
-							MessageKind = "InformationText"
+							Columns = 1,
+							Rows = 1,
+							Description = "Achtergrond",
+							Sequence = 10,
+							Messages = new List<Message>()
+							{
+								new Message()
+								{
+									Description = "Achtergrond",
+									PositionX = 0,
+									PositionY = 0,
+									Width = 1,
+									Height = 1,
+									MessageKind = "InformationText"
+								}
+							}
 						},
+						new Layer()
+						{
+							Columns = 16,
+							Rows = 9,
+							Description = "Layer 1",
+							Sequence = 20,
+							Messages = new List<Message>()
+							{
+								new Message
+								{
+									Description = "Bericht 1.1",
+									PositionX = 0,
+									PositionY = 0,
+									Width = 4,
+									Height = 5,
+									MessageKind = "InformationText"
+								},
 
-						new Message
-						{
-							Description = "Bericht 2",
-							PositionX = 4,
-							PositionY = 0,
-							Width = 4,
-							Height = 6,
-							MessageKind = "InformationText"
-						},
-
-						new Message
-						{
-							Description = "Bericht 3",
-							PositionX = 0,
-							PositionY = 5,
-							Width = 4,
-							Height = 1,
-							MessageKind = "InformationText"
-						},
-
-						new Message
-						{
-							Description = "Bericht 4",
-							PositionX = 0,
-							PositionY = 6,
-							Width = 16,
-							Height = 1,
-							MessageKind = "InformationText"
-						},
-
-						new Message
-						{
-							Description = "Bericht 5",
-							PositionX = 0,
-							PositionY = 7,
-							Width = 16,
-							Height = 1,
-							MessageKind = "InformationText"
-						},
-
-						new Message
-						{
-							Description = "Bericht 6",
-							PositionX = 0,
-							PositionY = 8,
-							Width = 8,
-							Height = 1,
-							MessageKind = "InformationText"
-						},
-
-						new Message
-						{
-							Description = "Bericht 7",
-							PositionX = 8,
-							PositionY = 8,
-							Width = 8,
-							Height = 1,
-							MessageKind = "InformationText"
-						},
-						new Message
-						{
-							Description = "Bericht 10",
-							PositionX = 12,
-							PositionY = 3,
-							Width = 4,
-							Height = 3,
-							MessageKind = "InformationText"
-						},
-						new Message
-						{
-							Description = "Bericht 8",
-							PositionX = 8,
-							PositionY = 0,
-							Width = 8,
-							Height = 3,
-							MessageKind = "InformationText"
-						},
-						new Message
-						{
-							Description = "Bericht 9",
-							PositionX = 8,
-							PositionY = 3,
-							Width = 4,
-							Height = 3,
-							MessageKind = "InformationText"
-						}						
+								new Message
+								{
+									Description = "Bericht 1.2",
+									PositionX = 4,
+									PositionY = 0,
+									Width = 4,
+									Height = 6,
+									MessageKind = "InformationText"
+								}		
+							}
+						}
 					}
 				});
 
-			slides.Add(new Slide
-			{
-				Description = "Slide 2",
-				Columns = 16,
-				Rows = 9,
-				Messages = new List<Message>()
-				{
-					new Message
-					{
-						Description = "Bericht 1",
-						PositionX = 0,
-						PositionY = 0,
-						Width = 4,
-						Height = 5,
-						MessageKind = "InformationText"
-					},
-
-					new Message
-					{
-						Description = "Bericht 2",
-						PositionX = 4,
-						PositionY = 0,
-						Width = 4,
-						Height = 6,
-						MessageKind = "InformationText"
-					}
-				}
-			});
 
 			context.Boards.Add(board);
 			context.Slides.AddRange(slides);

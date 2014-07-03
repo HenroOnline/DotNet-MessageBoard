@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageBoard.BLL
+namespace MessageBoard.Core
 {
 	public enum SettingKind
 	{

@@ -20,7 +20,8 @@ namespace MessageBoard.DAL.Entity
 
 		public string MessageKind { get; set; }
 
-		public Slide Slide { get; set; }
+		public int LayerId { get; set; }
+		public Layer Layer { get; set; }
 
 		public List<Setting> Settings { get; set; }
 	}

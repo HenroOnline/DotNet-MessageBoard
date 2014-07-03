@@ -1,0 +1,99 @@
+﻿@model MessageBoard.Web.Management.Models.Slide.MessageDetailViewModel
+<script>
+	$(function () {
+		$("button[value=delete]").click(function () {
+			return messageBoard.interaction.confirm("Weet u zeker dat u dit bericht wilt verwijderen?");
+		});
+
+		$("#@Html.IdFor(m => m.Message.MessageKind)").change(function () {			
+			$("[data-messagekind]").hide();
+
+			var currentValue = $(this).val();
+			if (currentValue.length > 0) {
+				$("[data-messagekind='" + currentValue + "']").show();
+			}
+		});
+
+		$("#@Html.IdFor(m => m.Message.MessageKind)").change();
+	});
+</script>
+
+@using (Html.BeginForm("MessageDetail", "Slide", FormMethod.Post))
+{
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.Message.Id)
+	@Html.HiddenFor(m => m.Message.LayerId)	
+
+	<div class="row">
+		<div class="col-sm-4">
+			<h4>Bericht detail</h4>
+			<div class="input-group">
+				@Html.LabelFor(m => m.Message.Description)
+				@Html.TextBoxFor(m => m.Message.Description, new { @class = "form-control", placeholder = "Omschrijving" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Message.PositionX)
+				@Html.TextBoxFor(m => m.Message.PositionX, new { @class = "form-control", placeholder = "Positie X" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Message.PositionY)
+				@Html.TextBoxFor(m => m.Message.PositionY, new { @class = "form-control", placeholder = "Positie Y" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Message.Width)
+				@Html.TextBoxFor(m => m.Message.Width, new { @class = "form-control", placeholder = "Breedte" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Message.Height)
+				@Html.TextBoxFor(m => m.Message.Height, new { @class = "form-control", placeholder = "Hoogte" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Message.MessageKind)
+				@Html.DropDownListFor(m => m.Message.MessageKind, Model.MessageKindDropDownList, new { @class = "form-control" })
+			</div>
+			<br />
+			@Html.ValidationSummary(false)
+			<p>
+				<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>
+				<a href="~/Slide/LayerDetail/@Model.Message.LayerId" class="btn btn-warning" role="button">Annuleren</a>
+				@if (Model.Message.Id != 0)
+				{
+					<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>
+				}
+			</p>
+		</div>
+		<div class="col-sm-8">
+			<h4>Instellingen</h4>
+			@for (var i = 0; i < Model.MessageKindList.Count; i++)
+			{
+				@Html.HiddenFor(m => m.MessageKindList[i].Key)
+				<div data-messagekind="@Model.MessageKindList[i].Key" style="display: none;">
+					@for (var j = 0; j < Model.MessageKindList[i].Settings.Count; j++)
+					{
+						<div class="input-group">
+							@Html.Label(Model.MessageKindList[i].Settings[j].Name)
+							@Html.HiddenFor(m => m.MessageKindList[i].Settings[j].Key)
+							@switch (Model.MessageKindList[i].Settings[j].Kind)
+							{
+								case MessageBoard.Core.SettingKind.Text:									
+									@Html.TextBoxFor(m => m.MessageKindList[i].Settings[j].Value, new { @class = "form-control" })
+									break;
+								case MessageBoard.Core.SettingKind.FormattedText:
+									@Html.TextBoxFor(m => m.MessageKindList[i].Settings[j].Value, new { @class = "form-control" })
+	
+									break;
+							}
+
+						</div>
+					}
+				</div>
+			}
+		</div>
+	</div>
+
+}

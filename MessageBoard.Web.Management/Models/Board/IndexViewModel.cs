@@ -13,9 +13,10 @@ namespace MessageBoard.Web.Management.Models.Board
 
 		public IndexViewModel()
 		{
-			Title = "Schermen";
-			Intro = "Hier kunt u nieuwe schermen toevoegen of bestaande schermen beheren";
+			Menu = "Board";
 			Boards = new List<BoardModel>();
+
+			AddCrumblePath("Schermen", "~/Board");
 		}
 
 		public static IndexViewModel Create()

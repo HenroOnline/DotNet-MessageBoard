@@ -10,10 +10,6 @@ namespace MessageBoard.DAL.Entity
 	{
 		public string Description { get; set; }
 
-		public int Columns { get; set; }
-
-		public int Rows { get; set; }
-
-		public ICollection<Message> Messages { get; set; }
+		public ICollection<Layer> Layers { get; set; }
 	}
 }

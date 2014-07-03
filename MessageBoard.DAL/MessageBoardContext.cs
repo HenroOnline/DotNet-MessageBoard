@@ -24,9 +24,11 @@ namespace MessageBoard.DAL
 
 		public DbSet<Board> Boards { get; set; }
 		public DbSet<Slide> Slides { get; set; }
+		public DbSet<Layer> Layers { get; set; }
 		public DbSet<BoardSlide> BoardSlides { get; set; }
 		public DbSet<Message> Messages { get; set; }
 		public DbSet<InformationText> InformationTexts { get; set; }
+		public DbSet<Setting> Settings { get; set; }
 
 		private static MessageBoardContext _instance;
 		public static MessageBoardContext Instance
@@ -81,6 +83,7 @@ namespace MessageBoard.DAL
 			modelBuilder.Configurations.Add(new BoardSlideConfiguration());
 			modelBuilder.Configurations.Add(new MessageConfiguration());
 			modelBuilder.Configurations.Add(new InformationTextConfiguration());
+			modelBuilder.Configurations.Add(new SettingConfiguration());
 		}
 
 		public override int SaveChanges()

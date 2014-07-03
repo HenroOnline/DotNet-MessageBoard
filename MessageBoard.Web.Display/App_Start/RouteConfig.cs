@@ -15,8 +15,8 @@ namespace MessageBoard.Web.Display
 
 			routes.MapRoute(
 					name: "Default",
-					url: "{controller}/{action}/{id}",
-					defaults: new { controller = "Home", action = "Index", key = UrlParameter.Optional }
+					url: "{controller}/{action}/{key}",
+					defaults: new { controller = "Board", action = "Index", key = UrlParameter.Optional }
 			);
 		}
 	}

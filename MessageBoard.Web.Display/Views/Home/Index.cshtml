@@ -1,9 +1,0 @@
-﻿@model MessageBoard.Web.Display.Models.SlideModel
-
-@foreach (var message in Model.Messages)
-{
-	<div style="position: absolute; top: -webkit-calc((100% / @Model.Rows) * @message.PositionY); left: -webkit-calc((100% / @Model.Columns) * @message.PositionX); width: -webkit-calc((100% / @Model.Columns) * @message.Width); height: -webkit-calc((100% / @Model.Rows) * @message.Height); background-color: #@message.BackgroundColor; ">
-		@message.Description<br/>
-		@DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")
-	</div>
-}

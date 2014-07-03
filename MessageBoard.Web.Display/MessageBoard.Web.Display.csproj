@@ -157,12 +157,14 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\MessageModel.cs" />
-    <Compile Include="Models\SlideModel.cs" />
+    <Compile Include="Models\Board\IndexViewModel.cs" />
+    <Compile Include="Models\Entities\LayerModel.cs" />
+    <Compile Include="Models\Entities\MessageModel.cs" />
+    <Compile Include="Models\Entities\SlideModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -183,13 +185,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Project_Readme.html" />
+    <Content Include="Views\Board\Index.cshtml" />
+    <Content Include="Views\Board\NoData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MessageBoard.BLL\MessageBoard.BLL.csproj">

@@ -1,4 +1,9 @@
-﻿/* styles for validation helpers */
+﻿body
+{
+	padding-top: 70px;
+}
+
+/* styles for validation helpers */
 .field-validation-error {
     color: #b94a48;
 }

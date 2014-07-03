@@ -1,0 +1,52 @@
+﻿@model MessageBoard.Web.Management.Models.Slide.DetailViewModel
+<script>
+	$(function () {
+		$("button[value=delete]").click(function () {
+			return messageBoard.interaction.confirm("Weet u zeker dat u deze slide wilt verwijderen?");
+		});
+	});
+</script>
+
+@using (Html.BeginForm("Detail", "Slide", FormMethod.Post))
+{
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.Slide.Id)
+	
+	<div class="row">
+		<div class="col-sm-4">
+			<h4>Slide detail</h4>
+			<div class="input-group">
+				@Html.LabelFor(m => m.Slide.Description)
+				@Html.TextBoxFor(m => m.Slide.Description, new { @class = "form-control", placeholder = "Omschrijving" })
+			</div>
+			<br />
+			@Html.ValidationSummary(false)
+			<p>
+				<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>
+				<a href="~/Slide/" class="btn btn-warning" role="button">Annuleren</a>
+				@if (Model.Slide.Id != 0)
+				{
+					<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>
+				}
+			</p>
+		</div>
+		@if (Model.Slide.Id != 0)
+		{ 
+			<div class="col-sm-8">
+				<h4>Layers</h4>
+				<div class="list-group">
+					@foreach (var l in Model.Layers)
+					{
+						<a href="~/Slide/LayerDetail/?slideId=@Model.Slide.Id&id=@l.Id" class="list-group-item">
+							<p class="list-group-item-text">@l.Description</p>						
+						</a>					
+					}
+				</div>
+				<p>
+					<a href="~/Slide/LayerDetail/?slideId=@Model.Slide.Id" class="btn btn-primary" role="button">Layer toevoegen</a>
+				</p>
+			</div>
+		}
+	</div>
+	
+}

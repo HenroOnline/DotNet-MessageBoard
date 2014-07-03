@@ -1,4 +1,4 @@
-﻿@Model MessageBoard.Web.Management.Models.BaseViewModel
+﻿@model MessageBoard.Web.Management.Models.BaseViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +15,6 @@
 </head>
 
 <body role="document">
-
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -29,22 +28,26 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="~/Board/">Schermen</a></li>
-					<li><a href="#about">Slides</a></li>
-					<li><a href="#contact">Content</a></li>
+					<li @Html.Raw((Model.Menu.ToLower() == "board") ? "class=\"active\"" : "")><a href="~/Board/">Schermen</a></li>
+					<li @Html.Raw((Model.Menu.ToLower() == "slide") ? "class=\"active\"" : "")><a href="~/Slide/">Slides</a></li>
+					<li @Html.Raw((Model.Menu.ToLower() == "message") ? "class=\"active\"" : "")><a href="~/Message/">Content</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="container theme-showcase" role="main">
-		@if (Model != null)
-		{
-				<!-- Main jumbotron for a primary marketing message or call to action -->
-			<div class="jumbotron">
-				<h1>@Model.Title</h1>
-				<p>@Model.Intro</p>
-			</div>
-		}
+	<div class="container" role="main">
+		<ol class="breadcrumb">
+			<li><a href="~/">Home</a></li>
+			@foreach (var cp in Model.CrumblePath)
+			{
+				<li><a href="@Href(cp.Second.ToString())">@cp.First</a></li>	
+			}
+			@if(Model.CurrentPage != null)
+			{ 
+				<li class="active">@Model.CurrentPage.First</li>	
+			}
+		</ol>
+
 		@RenderBody()
 	</div>		
 </body>

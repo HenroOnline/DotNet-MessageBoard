@@ -127,6 +127,7 @@
     <Content Include="Scripts\Libraries\jquery-2.1.1.min.js" />
     <None Include="Scripts\Libraries\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\Libraries\jquery.validate.js" />
+    <Content Include="Scripts\Libraries\jquery.validate.messages-nl.js" />
     <Content Include="Scripts\Libraries\jquery.validate.min.js" />
     <Content Include="Scripts\Libraries\jquery.validate.unobtrusive.bootstrap.js" />
     <Content Include="Scripts\Libraries\jquery.validate.unobtrusive.bootstrap.min.js" />
@@ -143,6 +144,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SlideController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -150,6 +152,16 @@
     <Compile Include="Models\Board\DetailViewModel.cs" />
     <Compile Include="Models\Board\IndexViewModel.cs" />
     <Compile Include="Models\Entities\BoardModel.cs" />
+    <Compile Include="Models\Entities\BoardSlideModel.cs" />
+    <Compile Include="Models\Entities\LayerModel.cs" />
+    <Compile Include="Models\Entities\MessageKindModel.cs" />
+    <Compile Include="Models\Entities\MessageModel.cs" />
+    <Compile Include="Models\Entities\SettingModel.cs" />
+    <Compile Include="Models\Entities\SlideModel.cs" />
+    <Compile Include="Models\Slide\DetailViewModel.cs" />
+    <Compile Include="Models\Slide\IndexViewModel.cs" />
+    <Compile Include="Models\Slide\LayerDetailViewModel.cs" />
+    <Compile Include="Models\Slide\MessageDetailViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +172,10 @@
     <Content Include="Scripts\Libraries\jquery-2.1.1.min.map" />
     <Content Include="Views\Board\Detail.cshtml" />
     <Content Include="Scripts\Libraries\jquery.validate.unobtrusive.bootstrap.min.js.map" />
+    <Content Include="Views\Slide\Index.cshtml" />
+    <Content Include="Views\Slide\Detail.cshtml" />
+    <Content Include="Views\Slide\LayerDetail.cshtml" />
+    <Content Include="Views\Slide\MessageDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -174,6 +190,10 @@
     <ProjectReference Include="..\MessageBoard.BLL\MessageBoard.BLL.csproj">
       <Project>{4efbb825-2236-4794-beaa-52e53b47daa0}</Project>
       <Name>MessageBoard.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageBoard.Core\MessageBoard.Core.csproj">
+      <Project>{27eef5b9-15bd-4457-b589-b85018192e72}</Project>
+      <Name>MessageBoard.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\MessageBoard.DAL\MessageBoard.DAL.csproj">
       <Project>{7a796f95-84ac-4f6d-bf69-6045f5472096}</Project>

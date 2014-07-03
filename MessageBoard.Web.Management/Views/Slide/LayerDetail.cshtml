@@ -1,0 +1,68 @@
+﻿@model MessageBoard.Web.Management.Models.Slide.LayerDetailViewModel
+<script>
+	$(function () {
+		$("button[value=delete]").click(function () {
+			return messageBoard.interaction.confirm("Weet u zeker dat u deze layer wilt verwijderen?");
+		});
+	});
+</script>
+
+@using (Html.BeginForm("LayerDetail", "Slide", FormMethod.Post))
+{
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.Layer.Id)
+	@Html.HiddenFor(m => m.Layer.SlideId)
+
+	<div class="row">
+		<div class="col-sm-4">
+			<h4>Layer detail</h4>
+			<div class="input-group">
+				@Html.LabelFor(m => m.Layer.Description)
+				@Html.TextBoxFor(m => m.Layer.Description, new { @class = "form-control", placeholder = "Omschrijving" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Layer.Columns)
+				@Html.TextBoxFor(m => m.Layer.Columns, new { @class = "form-control", placeholder = "Kolommen" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Layer.Rows)
+				@Html.TextBoxFor(m => m.Layer.Rows, new { @class = "form-control", placeholder = "Rijen" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Layer.Sequence)
+				@Html.TextBoxFor(m => m.Layer.Sequence, new { @class = "form-control", placeholder = "Volgorde" })
+			</div>
+			<br />
+			@Html.ValidationSummary(false)
+			<p>
+				<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>
+				<a href="~/Slide/Detail/@Model.Layer.SlideId" class="btn btn-warning" role="button">Annuleren</a>
+				@if (Model.Layer.Id != 0)
+				{
+					<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>
+				}
+			</p>
+		</div>
+		@if (Model.Layer.Id != 0)
+		{ 
+		<div class="col-sm-8">
+			<h4>Berichten</h4>
+			<div class="list-group">
+				@foreach (var m in Model.Messages)
+				{
+					<a href="~/Slide/MessageDetail/?layerId=@Model.Layer.Id&id=@m.Id" class="list-group-item">
+						<p class="list-group-item-text">@m.Description</p>
+					</a>
+				}
+			</div>
+			<p>
+				<a href="~/Slide/MessageDetail/?layerId=@Model.Layer.Id" class="btn btn-primary" role="button">Bericht toevoegen</a>
+			</p>
+		</div>
+		}
+	</div>
+
+}

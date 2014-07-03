@@ -18,9 +18,6 @@ namespace MessageBoard.DAL.Configuration
 
 			this.Property(s => s.Description).HasMaxLength(150)
 																			 .IsRequired();
-
-			this.Property(s => s.Columns).IsRequired();
-			this.Property(s => s.Rows).IsRequired();
 		}
 	}
 }

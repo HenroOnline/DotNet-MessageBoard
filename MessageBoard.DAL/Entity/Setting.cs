@@ -11,5 +11,8 @@ namespace MessageBoard.DAL.Entity
 		public string Key { get; set; }
 
 		public string StringValue { get; set; }
+
+		public int? MessageId { get; set; }
+		public Message Message { get; set; }		
 	}
 }
