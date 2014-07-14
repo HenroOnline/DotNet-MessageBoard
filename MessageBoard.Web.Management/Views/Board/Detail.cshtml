@@ -5,30 +5,98 @@
 		$("button[value=delete]").click(function () {
 			return messageBoard.interaction.confirm("Weet u zeker dat u dit scherm wilt verwijderen?");
 		});
+
+		$("button[value=save]").click(function () {
+			var hiddenInput = "";
+
+			var linkedSlides = $("li[data-id]", $("#linkedSlides"));
+			
+			for (var i = 0; i < linkedSlides.length; i++)
+			{				
+				var inputElement = '<input type="hidden" name="LinkedSlides[' + i + '].Id" value="' + $(linkedSlides[i]).attr("data-id") + '" />';
+				inputElement += '<input type="hidden" name="LinkedSlides[' + i + '].SlideId" value="' + $(linkedSlides[i]).attr("data-slideid") + '" />';
+				inputElement += '<input type="hidden" name="LinkedSlides[' + i + '].Sequence" value="' + ((i + 1) * 10) + '" />';
+				
+				hiddenInput += inputElement;
+			}
+
+			if (hiddenInput.length > 0) {
+				$(hiddenInput).appendTo($("form"));
+			}
+		});
 	});
 </script>
 
 @using (Html.BeginForm("Detail", "Board", FormMethod.Post))
 {
-	@Html.AntiForgeryToken()
-	@Html.HiddenFor(m => m.Board.Id)
-	<div class="input-group">
-		@Html.LabelFor(m => m.Board.Key)
-		@Html.TextBoxFor(m => m.Board.Key, new { @class = "form-control", placeholder = "Sleutel", autofocus = "autofocus" })
-	</div>
-	<br/>
-	<div class="input-group">
-		@Html.LabelFor(m => m.Board.Description)
-		@Html.TextBoxFor(m => m.Board.Description, new { @class = "form-control", placeholder = "Omschrijving" })
-	</div>
-	<br/>
-	@Html.ValidationSummary(false)
-	<p>
-		<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>		
-		<a href="~/Board/" class="btn btn-warning" role="button">Annuleren</a>
-		@if(Model.Board.Id != 0)
-		{ 
-			<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>
-		}
-	</p>
+	<div class="row">
+		<div class="col-sm-4">
+			<h4>Scherm detail</h4>
+			@Html.AntiForgeryToken()
+			@Html.HiddenFor(m => m.Board.Id)
+			<div class="input-group">
+				@Html.LabelFor(m => m.Board.Key)
+				@Html.TextBoxFor(m => m.Board.Key, new { @class = "form-control", placeholder = "Sleutel", autofocus = "autofocus" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Board.Description)
+				@Html.TextBoxFor(m => m.Board.Description, new { @class = "form-control", placeholder = "Omschrijving" })
+			</div>
+			<br />
+			@Html.ValidationSummary(false)
+			<p>
+				<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>
+				<a href="~/Board/" class="btn btn-warning" role="button">Annuleren</a>
+				@if (Model.Board.Id != 0)
+				{
+					<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>
+				}
+			</p>
+		</div>
+		<div class="col-sm-8">
+			<script>
+				/// http://jsfiddle.net/Y4T32/8/
+
+				$(function () {
+					$("#linkedSlides").sortable({
+						opacity: 0.75
+					});
+
+					$("#availableSlides li").draggable(config);
+
+					$(document).on('mouseover', '#availableSlides li', function (e) {
+						$(this).draggable(config);
+					});
+
+					var config = {
+						connectToSortable: "#linkedSlides",
+						helper: "clone",
+						opacity: 0.75,
+						revert: 'invalid',
+						stop: function (event, ui) {
+							//alert(ui)
+						}
+					};
+				});
+			</script>
+
+			<h4>Gekoppelde slides</h4>
+			<ul id="linkedSlides" class="list-group">
+				@foreach (var slide in Model.LinkedSlides)
+				{
+					<li class="list-group-item" data-id="@slide.Id" data-slideid="@slide.SlideId">@slide.SlideDescription</li>
+				}
+			</ul>
+
+			<h4>Beschikbare slides</h4>
+			<ul id="availableSlides" class="list-group">
+				@foreach (var slide in Model.AvailableSlides)
+				{
+					<li class="list-group-item" data-id="0" data-slideid="@slide.Id">@slide.Description</li>
+				}
+			</ul>
+
+			</div>
+		</div>
 }

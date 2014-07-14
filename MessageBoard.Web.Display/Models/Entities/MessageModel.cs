@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MessageBoard.Web.Display.Models.Entities
 {
@@ -23,7 +24,7 @@ namespace MessageBoard.Web.Display.Models.Entities
 
 		public string Opacity { get; set; }
 
-		public string Value { get; set; }
+		public MvcHtmlString Value { get; set; }
 
 		public static MessageModel Create(Message message, string backgroundColor, string opacity)
 		{
@@ -36,11 +37,9 @@ namespace MessageBoard.Web.Display.Models.Entities
 			result.BackgroundColor = backgroundColor;
 			result.Opacity = opacity;
 
-			var title = SettingRepository.Instance.Select(message.Id, "Title");
-			if (title != null)
-			{
-				result.Value = title.StringValue;
-			}
+			var messageKind = MessageBoard.Core.MessageKind.MessageKind.Select(message.MessageKind);
+			var settings = SettingRepository.Instance.ListAsMessageKindSetting(message.Id);
+			result.Value = MvcHtmlString.Create(messageKind.RenderHTML(settings));
 
 			return result;
 		}

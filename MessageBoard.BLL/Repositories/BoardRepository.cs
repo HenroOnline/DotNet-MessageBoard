@@ -19,5 +19,15 @@ namespace MessageBoard.BLL.Repositories
 			return Context.Boards.Where(b => b.ModifiedKind != "D")
 													 .OrderBy(b => b.Description).ToList();
 		}
+
+		public override void Delete(Board entity)
+		{
+			foreach (var bs in BoardSlideRepository.Instance.ListByBoard(entity.Id))
+			{
+				BoardSlideRepository.Instance.Delete(bs);
+			}
+
+			base.Delete(entity);
+		}
 	}
 }

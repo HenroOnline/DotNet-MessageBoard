@@ -56,6 +56,10 @@
     <Compile Include="Repositories\SlideRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MessageBoard.Core\MessageBoard.Core.csproj">
+      <Project>{27eef5b9-15bd-4457-b589-b85018192e72}</Project>
+      <Name>MessageBoard.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MessageBoard.DAL\MessageBoard.DAL.csproj">
       <Project>{7a796f95-84ac-4f6d-bf69-6045f5472096}</Project>
       <Name>MessageBoard.DAL</Name>

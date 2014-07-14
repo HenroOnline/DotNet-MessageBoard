@@ -90,6 +90,7 @@ namespace MessageBoard.Web.Management.Controllers
 		}
 
 		[HttpPost]
+		[ValidateInput(false)]
 		public ActionResult MessageDetail(MessageDetailViewModel model, string action)
 		{
 			switch (action)

@@ -32,3 +32,9 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+#linkedSlides
+{
+	padding: 5px;
+	background-color: #f5f5f5;
+}

@@ -6,7 +6,7 @@
 	{
 		foreach (var message in layer.Messages)
 		{
-			<div style="z-index: @layer.Sequence; position: absolute; top: -webkit-calc((100% / @layer.Rows) * @message.PositionY); left: -webkit-calc((100% / @layer.Columns) * @message.PositionX); width: -webkit-calc((100% / @layer.Columns) * @message.Width); height: -webkit-calc((100% / @layer.Rows) * @message.Height); background-color: #@message.BackgroundColor; opacity: @message.Opacity ">
+			<div style="z-index: @layer.Sequence; position: absolute; top: -webkit-calc((100% / @layer.Rows) * @message.PositionY); left: -webkit-calc((100% / @layer.Columns) * @message.PositionX); width: -webkit-calc((100% / @layer.Columns) * @message.Width); height: -webkit-calc((100% / @layer.Rows) * @message.Height);">
 				@message.Value
 			</div>	
 		}

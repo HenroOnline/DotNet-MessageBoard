@@ -84,8 +84,7 @@
 									@Html.TextBoxFor(m => m.MessageKindList[i].Settings[j].Value, new { @class = "form-control" })
 									break;
 								case MessageBoard.Core.SettingKind.FormattedText:
-									@Html.TextBoxFor(m => m.MessageKindList[i].Settings[j].Value, new { @class = "form-control" })
-	
+									@Html.EditorFor(m => m.MessageKindList[i].Settings[j].Value, "wysiwyg", new { @class = "form-control" })
 									break;
 							}
 

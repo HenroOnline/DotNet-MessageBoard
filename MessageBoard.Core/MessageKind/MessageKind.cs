@@ -12,6 +12,11 @@ namespace MessageBoard.Core.MessageKind
 		public string Key { get; internal set; }
 		public abstract string Title { get; }
 
+		public virtual string RenderHTML(MessageKindSettingList settings)
+		{
+			return string.Empty;
+		}
+
 		public abstract List<MessageKindSetting> Settings { get; }
 
 		private static List<MessageKind> list;
@@ -38,6 +43,11 @@ namespace MessageBoard.Core.MessageKind
 
 				return list;
 			}
+		}
+
+		public static MessageKind Select(string key)
+		{
+			return List.FirstOrDefault(m => m.Key == key);
 		}
 	}
 }

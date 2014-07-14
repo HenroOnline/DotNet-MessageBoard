@@ -11,7 +11,9 @@ namespace MessageBoard.Web.Management.Models.Board
 	public class DetailViewModel : BaseViewModel
 	{
 		public BoardModel Board { get; set; }
-		public List<BoardSlideModel> Slides { get; set; }
+		public List<BoardSlideModel> LinkedSlides { get; set; }
+		public List<SlideModel> AvailableSlides { get; set; }
+
 		public DetailViewModel()
 		{
 			Menu = "Board";
@@ -22,13 +24,19 @@ namespace MessageBoard.Web.Management.Models.Board
 			var result = new DetailViewModel();
 
 			result.Board = BoardModel.Create(BoardRepository.Instance.Select(id));
+			
+			result.AvailableSlides = new List<SlideModel>();
+			foreach (var slide in SlideRepository.Instance.ListOrderedByDescription())
+			{
+				result.AvailableSlides.Add(SlideModel.Create(slide));
+			}
 
-			result.Slides = new List<BoardSlideModel>();
+			result.LinkedSlides = new List<BoardSlideModel>();
 			if (result.Board.Id != 0)
 			{
 				foreach (var bs in BoardSlideRepository.Instance.ListByBoard(result.Board.Id))
-				{
-					result.Slides.Add(BoardSlideModel.Create(bs));
+				{					
+					result.LinkedSlides.Add(BoardSlideModel.Create(bs));
 				}
 			}
 
@@ -55,8 +63,37 @@ namespace MessageBoard.Web.Management.Models.Board
 			dbBoard.Description = Board.Description;
 			
 			BoardRepository.Instance.Save(dbBoard);
-
 			Board.Id = dbBoard.Id;
+
+			var currentBoardSlides = BoardSlideRepository.Instance.ListByBoard(dbBoard.Id);
+			foreach (var newSlide in LinkedSlides)
+			{
+				DAL.Entity.BoardSlide dbBoardSlide = null;
+				if (newSlide.Id != 0)
+				{
+					dbBoardSlide = BoardSlideRepository.Instance.Select(newSlide.Id);
+
+					if (dbBoardSlide != null)
+					{
+						currentBoardSlides.RemoveAll(bs => bs.Id == dbBoardSlide.Id);
+					}
+				}
+				
+				if (dbBoardSlide == null)
+				{
+					dbBoardSlide = BoardSlideRepository.Instance.NewEntity();
+					dbBoardSlide.BoardId = dbBoard.Id;
+				}
+				dbBoardSlide.SlideId = newSlide.SlideId;
+				dbBoardSlide.Sequence = newSlide.Sequence;
+
+				BoardSlideRepository.Instance.Save(dbBoardSlide);				
+			}
+
+			foreach (var bs in currentBoardSlides)
+			{
+				BoardSlideRepository.Instance.Delete(bs);
+			}			
 		}
 
 		public void Delete()

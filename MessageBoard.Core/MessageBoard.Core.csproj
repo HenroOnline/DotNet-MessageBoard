@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MessageKindSetting.cs" />
+    <Compile Include="MessageKindSettingList.cs" />
     <Compile Include="MessageKind\HTMLMessageKind.cs" />
     <Compile Include="MessageKind\MessageKind.cs" />
     <Compile Include="MessageKind\RSSFeedMessageKind.cs" />

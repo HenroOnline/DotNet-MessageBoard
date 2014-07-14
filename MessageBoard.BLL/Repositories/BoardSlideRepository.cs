@@ -11,7 +11,8 @@ namespace MessageBoard.BLL.Repositories
 	{
 		public List<BoardSlide> ListByBoard(int boardId)
 		{
-			return Context.BoardSlides.Where(bs => bs.ModifiedKind != "D")
+			return Context.BoardSlides.Include("Slide")
+																.Where(bs => bs.ModifiedKind != "D")
 																.Where(bs => bs.Board.Id == boardId)
 																.OrderBy(bs => bs.Sequence).ToList();
 		}

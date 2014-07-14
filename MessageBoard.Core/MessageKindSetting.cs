@@ -14,6 +14,20 @@ namespace MessageBoard.Core
 
 		public SettingKind SettingKind { get; set; }
 
+		public object Value
+		{
+			get;
+			set;
+		}
+
+		public string StringValue
+		{
+			get
+			{
+				return (string)Value;
+			}
+		}
+
 		public static MessageKindSetting Create(string key, string name, SettingKind settingKind)
 		{
 			return new MessageKindSetting
