@@ -15,5 +15,7 @@ namespace MessageBoard.DAL.Entity
 		public Slide Slide { get; set; }
 
 		public int Sequence { get; set; }
+
+		public int Duration { get; set; }
 	}
 }

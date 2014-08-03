@@ -86,6 +86,9 @@
 								case MessageBoard.Core.SettingKind.FormattedText:
 									@Html.EditorFor(m => m.MessageKindList[i].Settings[j].Value, "wysiwyg", new { @class = "form-control" })
 									break;
+								case MessageBoard.Core.SettingKind.Information:
+									@Html.DropDownListFor(m => m.MessageKindList[i].Settings[j].Value, Model.InformationHeaderDropDownList, new { @class = "form-control" })
+									break;
 							}
 
 						</div>

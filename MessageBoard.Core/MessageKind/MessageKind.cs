@@ -28,17 +28,21 @@ namespace MessageBoard.Core.MessageKind
 				{
 					list = new List<MessageKind>();
 
-					var executingAssembly = Assembly.GetExecutingAssembly();
-					var messageKindBaseType = typeof(MessageKind);
-					foreach (var assemblyType in executingAssembly.GetTypes())
+					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 					{
-						if (!assemblyType.IsAbstract && messageKindBaseType.IsAssignableFrom(assemblyType))
+						var messageKindBaseType = typeof(MessageKind);
+						foreach (var assemblyType in assembly.GetTypes())
 						{
-							var messageKindInstance = (MessageKind)Activator.CreateInstance(assemblyType);
-							messageKindInstance.Key = messageKindInstance.GetType().ToString();
-							list.Add(messageKindInstance);
+							if (!assemblyType.IsAbstract && messageKindBaseType.IsAssignableFrom(assemblyType))
+							{
+								var messageKindInstance = (MessageKind)Activator.CreateInstance(assemblyType);
+								messageKindInstance.Key = messageKindInstance.GetType().ToString();
+								list.Add(messageKindInstance);
+							}
 						}
 					}
+
+					list = list.OrderBy(m => m.Title).ToList();
 				}
 
 				return list;

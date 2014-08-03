@@ -9,6 +9,7 @@ namespace MessageBoard.Core
 	public enum SettingKind
 	{
 		Text,
-		FormattedText
+		FormattedText,
+		Information
 	}
 }

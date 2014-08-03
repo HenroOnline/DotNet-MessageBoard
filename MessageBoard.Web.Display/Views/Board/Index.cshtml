@@ -2,13 +2,57 @@
 
 @foreach (var slide in Model.Slides)
 {
-	foreach(var layer in slide.Layers)
-	{
-		foreach (var message in layer.Messages)
+	<div data-slide="true" data-duration="@slide.Duration" style="display: @(slide.FirstSlide? "block" : "none")">
+		@foreach (var layer in slide.Layers)
 		{
-			<div style="z-index: @layer.Sequence; position: absolute; top: -webkit-calc((100% / @layer.Rows) * @message.PositionY); left: -webkit-calc((100% / @layer.Columns) * @message.PositionX); width: -webkit-calc((100% / @layer.Columns) * @message.Width); height: -webkit-calc((100% / @layer.Rows) * @message.Height);">
-				@message.Value
-			</div>	
+			foreach (var message in layer.Messages)
+			{
+				<div style="z-index: @layer.Sequence; position: absolute; top: -webkit-calc((100% / @layer.Rows) * @message.PositionY); left: -webkit-calc((100% / @layer.Columns) * @message.PositionX); width: -webkit-calc((100% / @layer.Columns) * @message.Width); height: -webkit-calc((100% / @layer.Rows) * @message.Height);">
+					@message.Value
+				</div>
+			}
 		}
-	}	
+	</div>
+}
+
+@if (Model.Slides.Count > 1)
+{ 
+	<script>
+		function rotateSlide()
+		{
+			var availableSlides = $("div[data-slide]");
+			var currentVisibleSlide = availableSlides.filter(":visible");
+					
+			var currentIndex = availableSlides.index(currentVisibleSlide);
+
+			if (currentIndex == availableSlides.length - 1)
+			{
+				switchSlide(currentVisibleSlide, $(availableSlides[0]));
+			}
+			else
+			{
+				switchSlide(currentVisibleSlide, $(availableSlides[currentIndex + 1]));
+			}
+		}
+
+		function switchSlide(oldSlide, newSlide)
+		{
+			oldSlide.hide();
+			newSlide.show(function () {
+				setSlideTimeout(newSlide);
+			});
+		}
+
+		function setSlideTimeout(slide)
+		{
+			var durationInSeconds = parseInt(slide.attr("data-duration")) * 1000;
+			setTimeout(rotateSlide, durationInSeconds);
+		}
+
+		$(function () {
+			var availableSlides = $("div[data-slide]");
+			var currentVisibleSlide = availableSlides.filter(":visible");
+			setSlideTimeout(currentVisibleSlide);
+		});
+	</script>
 }

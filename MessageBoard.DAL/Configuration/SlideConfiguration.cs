@@ -11,11 +11,8 @@ namespace MessageBoard.DAL.Configuration
 	{
 		public SlideConfiguration()
 		{
-			if (!string.IsNullOrEmpty(MessageBoardContext.SchemaName))
-			{
-				this.ToTable("Slide", MessageBoardContext.SchemaName);
-			}
-
+			this.ToTable("Slide", MessageBoardContext.SchemaName);
+			
 			this.Property(s => s.Description).HasMaxLength(150)
 																			 .IsRequired();
 		}

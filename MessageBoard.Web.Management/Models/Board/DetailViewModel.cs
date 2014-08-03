@@ -66,28 +66,35 @@ namespace MessageBoard.Web.Management.Models.Board
 			Board.Id = dbBoard.Id;
 
 			var currentBoardSlides = BoardSlideRepository.Instance.ListByBoard(dbBoard.Id);
-			foreach (var newSlide in LinkedSlides)
+			if (LinkedSlides != null)
 			{
-				DAL.Entity.BoardSlide dbBoardSlide = null;
-				if (newSlide.Id != 0)
+				var currentSequence = 10;
+				foreach (var newSlide in LinkedSlides)
 				{
-					dbBoardSlide = BoardSlideRepository.Instance.Select(newSlide.Id);
-
-					if (dbBoardSlide != null)
+					DAL.Entity.BoardSlide dbBoardSlide = null;
+					if (newSlide.Id != 0)
 					{
-						currentBoardSlides.RemoveAll(bs => bs.Id == dbBoardSlide.Id);
-					}
-				}
-				
-				if (dbBoardSlide == null)
-				{
-					dbBoardSlide = BoardSlideRepository.Instance.NewEntity();
-					dbBoardSlide.BoardId = dbBoard.Id;
-				}
-				dbBoardSlide.SlideId = newSlide.SlideId;
-				dbBoardSlide.Sequence = newSlide.Sequence;
+						dbBoardSlide = BoardSlideRepository.Instance.Select(newSlide.Id);
 
-				BoardSlideRepository.Instance.Save(dbBoardSlide);				
+						if (dbBoardSlide != null)
+						{
+							currentBoardSlides.RemoveAll(bs => bs.Id == dbBoardSlide.Id);
+						}
+					}
+
+					if (dbBoardSlide == null)
+					{
+						dbBoardSlide = BoardSlideRepository.Instance.NewEntity();
+						dbBoardSlide.BoardId = dbBoard.Id;
+					}
+					dbBoardSlide.SlideId = newSlide.SlideId;
+					dbBoardSlide.Duration = newSlide.Duration;
+					dbBoardSlide.Sequence = currentSequence;
+
+					BoardSlideRepository.Instance.Save(dbBoardSlide);
+
+					currentSequence += 10;
+				}
 			}
 
 			foreach (var bs in currentBoardSlides)

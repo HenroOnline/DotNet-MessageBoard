@@ -12,7 +12,7 @@ namespace MessageBoard.Web.Management.Models.Entities
 		public int SlideId { get; set; }
 		public string SlideDescription { get; set; }
 
-		public int Sequence { get; set; }
+		public int Duration { get; set; }
 
 		public static BoardSlideModel Create (BoardSlide boardSlide)
 		{
@@ -25,7 +25,7 @@ namespace MessageBoard.Web.Management.Models.Entities
 			result.Id = boardSlide.Id;
 			result.SlideId = boardSlide.SlideId;
 			result.SlideDescription = boardSlide.Slide.Description;
-			result.Sequence = boardSlide.Sequence;
+			result.Duration = boardSlide.Duration;
 
 			return result;
 		}		

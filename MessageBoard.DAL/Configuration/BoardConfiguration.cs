@@ -11,10 +11,7 @@ namespace MessageBoard.DAL.Configuration
 	{
 		public BoardConfiguration()
 		{
-			if (!string.IsNullOrEmpty(MessageBoardContext.SchemaName))
-			{
-				this.ToTable("Board", MessageBoardContext.SchemaName);
-			}
+			this.ToTable("Board", MessageBoardContext.SchemaName);			
 
 			this.Property(b => b.Key).HasMaxLength(150)
 															 .IsRequired();

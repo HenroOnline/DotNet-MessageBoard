@@ -10,6 +10,11 @@
 		toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
 		image_advtab: true,
 
+		forced_root_block : "",
+		force_br_newlines : true,
+		force_p_newlines : false,
+		entity_encoding: "named",
+
 		external_filemanager_path: "/Scripts/Libraries/responsivefilemanager/filemanager/",
 		filemanager_title: "Responsive Filemanager",
 		external_plugins: { "filemanager": "/Scripts/Libraries/tinymce//plugins/responsivefilemanager/plugin.min.js" }

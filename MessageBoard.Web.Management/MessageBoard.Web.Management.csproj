@@ -530,6 +530,7 @@
     <Compile Include="App_Start\BundleLogic.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BoardController.cs" />
+    <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SlideController.cs" />
     <Compile Include="Global.asax.cs">
@@ -540,11 +541,15 @@
     <Compile Include="Models\Board\IndexViewModel.cs" />
     <Compile Include="Models\Entities\BoardModel.cs" />
     <Compile Include="Models\Entities\BoardSlideModel.cs" />
+    <Compile Include="Models\Entities\InformationDataModel.cs" />
+    <Compile Include="Models\Entities\InformationHeaderModel.cs" />
     <Compile Include="Models\Entities\LayerModel.cs" />
     <Compile Include="Models\Entities\MessageKindModel.cs" />
     <Compile Include="Models\Entities\MessageModel.cs" />
     <Compile Include="Models\Entities\SettingModel.cs" />
     <Compile Include="Models\Entities\SlideModel.cs" />
+    <Compile Include="Models\Information\DetailViewModel.cs" />
+    <Compile Include="Models\Information\IndexViewModel.cs" />
     <Compile Include="Models\Slide\DetailViewModel.cs" />
     <Compile Include="Models\Slide\IndexViewModel.cs" />
     <Compile Include="Models\Slide\LayerDetailViewModel.cs" />
@@ -617,6 +622,8 @@
     <Content Include="Scripts\Libraries\responsivefilemanager\filemanager\uploader\index.php" />
     <Content Include="Scripts\Libraries\responsivefilemanager\filemanager\uploader\jupload.php" />
     <Content Include="Scripts\Libraries\responsivefilemanager\filemanager\uploader\success.php" />
+    <Content Include="Views\Information\Index.cshtml" />
+    <Content Include="Views\Information\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -639,6 +646,10 @@
     <ProjectReference Include="..\MessageBoard.DAL\MessageBoard.DAL.csproj">
       <Project>{7a796f95-84ac-4f6d-bf69-6045f5472096}</Project>
       <Name>MessageBoard.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageBoard.HervormdRouveen\MessageBoard.HervormdRouveen.csproj">
+      <Project>{f0fa7124-2cb3-4dd7-bc23-6e0b062c3c7c}</Project>
+      <Name>MessageBoard.HervormdRouveen</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

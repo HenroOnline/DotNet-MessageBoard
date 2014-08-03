@@ -38,3 +38,8 @@ input[type="checkbox"].input-validation-error {
 	padding: 5px;
 	background-color: #f5f5f5;
 }
+
+#availableSlides input, #availableSlides button
+{
+	display: none;
+}

@@ -12,10 +12,13 @@
 			var linkedSlides = $("li[data-id]", $("#linkedSlides"));
 			
 			for (var i = 0; i < linkedSlides.length; i++)
-			{				
-				var inputElement = '<input type="hidden" name="LinkedSlides[' + i + '].Id" value="' + $(linkedSlides[i]).attr("data-id") + '" />';
-				inputElement += '<input type="hidden" name="LinkedSlides[' + i + '].SlideId" value="' + $(linkedSlides[i]).attr("data-slideid") + '" />';
-				inputElement += '<input type="hidden" name="LinkedSlides[' + i + '].Sequence" value="' + ((i + 1) * 10) + '" />';
+			{
+				var linkedSlide = $(linkedSlides[i]);
+				var duration = $("input", linkedSlide).val();
+
+				var inputElement = '<input type="hidden" name="LinkedSlides[' + i + '].Id" value="' + linkedSlide.attr("data-id") + '" />';
+				inputElement += '<input type="hidden" name="LinkedSlides[' + i + '].SlideId" value="' + linkedSlide.attr("data-slideid") + '" />';
+				inputElement += '<input type="hidden" name="LinkedSlides[' + i + '].Duration" value="' + duration + '" />';
 				
 				hiddenInput += inputElement;
 			}
@@ -69,6 +72,10 @@
 						$(this).draggable(config);
 					});
 
+					$("#linkedSlides").on("click", "button[data-removeslide]", function () {
+						$(this).closest("li").remove();
+					});
+					
 					var config = {
 						connectToSortable: "#linkedSlides",
 						helper: "clone",
@@ -85,7 +92,21 @@
 			<ul id="linkedSlides" class="list-group">
 				@foreach (var slide in Model.LinkedSlides)
 				{
-					<li class="list-group-item" data-id="@slide.Id" data-slideid="@slide.SlideId">@slide.SlideDescription</li>
+					<li class="list-group-item" data-id="@slide.Id" data-slideid="@slide.SlideId">
+						<div class="row">
+							<div class="col-sm-9">
+								@slide.SlideDescription
+							</div>
+							<div class="col-sm-2">
+								<input type="number" value="@slide.Duration" class="form-control" />
+							</div>
+								<div class="col-sm-1">
+									<button type="button" data-removeslide="" class="btn btn-danger btn-sm">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</div>
+							</div>							
+					</li>
 				}
 			</ul>
 
@@ -93,7 +114,21 @@
 			<ul id="availableSlides" class="list-group">
 				@foreach (var slide in Model.AvailableSlides)
 				{
-					<li class="list-group-item" data-id="0" data-slideid="@slide.Id">@slide.Description</li>
+					<li class="list-group-item" data-id="0" data-slideid="@slide.Id">
+						<div class="row">
+							<div class="col-sm-9">
+								@slide.Description
+							</div>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" value="30" />
+							</div>
+								<div class="col-sm-1">
+									<button type="button" data-removeslide="" class="btn btn-danger btn-sm">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</div>
+							</div>							
+					</li>
 				}
 			</ul>
 

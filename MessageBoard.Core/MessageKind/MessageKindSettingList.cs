@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageBoard.Core
+namespace MessageBoard.Core.MessageKind
 {
 	public class MessageKindSettingList : List<MessageKindSetting>
 	{

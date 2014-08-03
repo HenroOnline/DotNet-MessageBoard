@@ -56,7 +56,7 @@ namespace MessageBoard.DAL.Initializer
 									PositionY = 0,
 									Width = 4,
 									Height = 5,
-									MessageKind = "InformationText"
+									MessageKind = "MessageBoard.Core.MessageKind.HTMLMessageKind"
 								},
 
 								new Message
@@ -66,7 +66,7 @@ namespace MessageBoard.DAL.Initializer
 									PositionY = 0,
 									Width = 4,
 									Height = 6,
-									MessageKind = "InformationText"
+									MessageKind = "MessageBoard.Core.MessageKind.HTMLMessageKind"
 								}		
 							}
 						}
@@ -77,12 +77,13 @@ namespace MessageBoard.DAL.Initializer
 			context.Boards.Add(board);
 			context.Slides.AddRange(slides);
 
-			int sequence = 1;
+			int sequence = 10;
 			slides.ForEach(s => context.BoardSlides.Add(new BoardSlide
 				{
 					Board = board,
 					Slide = s,
-					Sequence = sequence++,
+					Duration = 30,
+					Sequence = (sequence += 10)
 				}));
 		}
 	}

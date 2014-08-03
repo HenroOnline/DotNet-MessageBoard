@@ -1,0 +1,195 @@
+﻿@model MessageBoard.Web.Management.Models.Information.DetailViewModel
+<script>
+	$(function () {
+		$("button[value=delete]").click(function () {
+			return messageBoard.interaction.confirm("Weet u zeker dat u dit informatie item wilt verwijderen?");
+		});
+
+		$("#@Html.IdFor(m => m.InformationHeader.InformationKindKey)").change(function () {
+			$("[data-informationkind]").hide();
+
+			var currentValue = $(this).val();
+			
+			if (currentValue.length > 0) {
+				$("[data-informationkind='" + currentValue + "']").show();
+			}
+		});
+
+		$("#@Html.IdFor(m => m.InformationHeader.InformationKindKey)").change();
+
+		$("button[value=save]").click(function (e) {
+			var hiddenInput = "";
+			var scriptInput = "";
+			var selectedInformationKind = $("#@Html.IdFor(m => m.InformationHeader.InformationKindKey)").val();			
+			var dataContainer = $("div[data-informationkind=\"" + selectedInformationKind + "\"]");
+			
+			
+			var textArea = $("textarea", dataContainer);
+			if (textArea.length > 0)
+			{				
+				var inputElement = '<input type="hidden" id="InformationHeader_InformationData_0__Content" name="InformationHeader.InformationData[0].Content" value="" />';
+				inputElement += '<input type="hidden" name="InformationHeader.InformationData[0].Row" value="0" />';
+				inputElement += '<input type="hidden" name="InformationHeader.InformationData[0].Column" value="0" />';
+
+				var scriptElement = '<script type="text/javascript">$("#InformationHeader_InformationData_0__Content").val(tinyMCE.get("' + textArea.attr("id") + '").getContent({format : "raw"}))<\/script>';
+				hiddenInput += inputElement;
+				scriptInput += scriptElement;
+			}
+			else
+			{
+				var inputTextBoxes = $("input", dataContainer);
+				var hiddenInputCounter = 0;
+				for (var i = 0; i < inputTextBoxes.length; i++) {
+					var inputTextBox = $(inputTextBoxes[i]);
+					if (inputTextBox.val().length == 0)
+					{
+						continue;
+					}
+					
+					var inputElement = '<input type="hidden" id="InformationHeader_InformationData_' + hiddenInputCounter + '__Content" name="InformationHeader.InformationData[' + hiddenInputCounter + '].Content" value="" />';
+					inputElement += '<input type="hidden" name="InformationHeader.InformationData[' + hiddenInputCounter + '].Row" value="' + inputTextBox.attr("data-row") + '" />';
+					inputElement += '<input type="hidden" name="InformationHeader.InformationData[' + hiddenInputCounter + '].Column" value="' + inputTextBox.attr("data-column") + '" />';
+
+					var scriptElement = "$('#InformationHeader_InformationData_" + hiddenInputCounter + "__Content').val($('#" + inputTextBox.attr("id") + "').val());";
+
+					hiddenInput += inputElement;
+					scriptInput += scriptElement;
+
+					hiddenInputCounter += 1;
+				}
+
+				if (scriptInput.length > 0)
+				{
+					scriptInput = '<script type="text/javascript">' + scriptInput + "<\/script>"
+				}			
+			}
+			
+			if (hiddenInput.length > 0) {
+				$(hiddenInput).appendTo($("form"));
+			}
+			
+			if (scriptInput.length > 0)
+			{
+				$(scriptInput).appendTo($("form"));
+			}
+
+			// Prevent unnecessary post data
+			$("div[data-informationkind]").remove();
+
+		});
+	});
+
+</script>
+
+@using (Html.BeginForm("Detail", "Information", FormMethod.Post))
+{
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.InformationHeader.Id)
+
+	<div class="row">
+		<div class="col-sm-4">
+			<h4>Informatie item</h4>
+			<div class="input-group">
+				@Html.LabelFor(m => m.InformationHeader.Name)
+				@Html.TextBoxFor(m => m.InformationHeader.Name, new { @class = "form-control", placeholder = "Naam" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.InformationHeader.InformationKindKey)
+
+				<select name="@Html.NameFor(m => m.InformationHeader.InformationKindKey)" id="@Html.IdFor(m => m.InformationHeader.InformationKindKey)" class="form-control">
+					@for (var i = 0; i < Model.InformationKindList.Count; i++)
+					{
+						var informationKind = Model.InformationKindList[i];
+						var selectedAttribute = Model.InformationHeader.InformationKindKey == informationKind.Key ? "selected=\"selected\"" : "";
+						<option @selectedAttribute value="@informationKind.Key" data-freecontent="@informationKind.FreeContent" data-tabulardata="@informationKind.TabularData">@informationKind.Title</option>
+					}
+				</select>
+			</div>
+			<br />
+			@Html.ValidationSummary(false)
+			<p>
+				<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>
+				<a href="~/Slide/" class="btn btn-warning" role="button">Annuleren</a>
+				@if (Model.InformationHeader.Id != 0)
+				{
+					<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>
+				}
+			</p>
+		</div>
+
+		<div class="col-sm-8">
+			<h4>Content</h4>
+			@foreach (var informationKind in Model.InformationKindList)
+			{
+				<div data-informationkind="@informationKind.Key" style="display: none;">
+					@if (informationKind.FreeContent)
+					{
+						var elementKey = informationKind.Key + "_FreeContent";
+						var content = GetContent(informationKind.Key, 0, 0);
+						
+						@Html.EditorFor(x => new Dictionary<string, string>() { { elementKey, content } }[elementKey], "wysiwyg")
+					}
+
+					@if (informationKind.TabularData)
+					{
+						var rows = informationKind.TabularDataDefaultRows;
+						if (informationKind.Key == Model.InformationHeader.InformationKindKey
+								&& Model.InformationHeader.InformationData.Count > 0)
+						{
+							rows = Model.InformationHeader.InformationData.Max(m => m.Row) + 1;
+						}
+
+						<table>
+							@if (informationKind.TabularDataColumns.Any(c => !string.IsNullOrEmpty(c.Title)))
+							{ 
+								<tr>
+									@foreach (var column in informationKind.TabularDataColumns)
+									{
+										<td>
+											@column.Title
+										</td>
+									}
+								</tr>
+							}
+							@for (var i = 0; i < rows; i++)
+							{
+								<tr>
+									@for (var j = 0; j < informationKind.TabularDataColumns.Count; j++)
+									{
+										var content = GetContent(informationKind.Key, i, j);										
+
+										<td>
+											@Html.TextBox(@informationKind.Key + "_" + i + "_" + j, content, new { @class = "form-control", data_row = i, data_column = j })
+										</td>
+									}
+								</tr>
+							}
+						</table>
+					}
+				</div>
+			}
+		</div>
+	</div>
+}
+
+@functions
+{
+	string GetContent(string informationKind, int row, int column)
+	{
+		var result = "";
+		if (informationKind != Model.InformationHeader.InformationKindKey)
+		{
+			return result;
+		}
+		
+		var contentRecord = Model.InformationHeader.InformationData.FirstOrDefault(d => d.Row == row && d.Column == column);
+		
+		if (contentRecord != null)
+		{
+			result = contentRecord.Content;
+			
+		}
+		return result;			
+	}
+}

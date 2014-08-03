@@ -51,7 +51,8 @@
     <Compile Include="Configuration\BaseConfiguration.cs" />
     <Compile Include="Configuration\BoardConfiguration.cs" />
     <Compile Include="Configuration\BoardSlideConfiguration.cs" />
-    <Compile Include="Configuration\InformationTextConfiguration.cs" />
+    <Compile Include="Configuration\InformationDataConfiguration.cs" />
+    <Compile Include="Configuration\InformationHeaderConfiguration.cs" />
     <Compile Include="Configuration\LayerConfiguration.cs" />
     <Compile Include="Configuration\MessageConfiguration.cs" />
     <Compile Include="Configuration\SettingConfiguration.cs" />
@@ -59,7 +60,8 @@
     <Compile Include="Entity\Base.cs" />
     <Compile Include="Entity\Board.cs" />
     <Compile Include="Entity\BoardSlide.cs" />
-    <Compile Include="Entity\InformationText.cs" />
+    <Compile Include="Entity\InformationData.cs" />
+    <Compile Include="Entity\InformationHeader.cs" />
     <Compile Include="Entity\Layer.cs" />
     <Compile Include="Entity\Message.cs" />
     <Compile Include="Entity\Setting.cs" />

@@ -1,0 +1,17 @@
+﻿@model MessageBoard.Web.Management.Models.Information.IndexViewModel
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="list-group">
+			@foreach (var ih in Model.InformationHeaders)
+			{
+				<a href="~/Information/Detail/@ih.Id" class="list-group-item">
+					<p class="list-group-item-text">@ih.Name</p>
+				</a>
+			}
+		</div>
+	</div><!-- /.col-sm-12 -->
+</div>
+<p>
+	<a href="~/Information/Detail/" class="btn btn-primary" role="button">Informatie item toevoegen</a>
+</p>

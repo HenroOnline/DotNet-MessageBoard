@@ -11,11 +11,8 @@ namespace MessageBoard.DAL.Configuration
 	{
 		public LayerConfiguration()
 		{
-			if (!string.IsNullOrEmpty(MessageBoardContext.SchemaName))
-			{
-				this.ToTable("Layer", MessageBoardContext.SchemaName);
-			}
-
+			this.ToTable("Layer", MessageBoardContext.SchemaName);
+			
 			this.Property(s => s.Description).HasMaxLength(150)
 																			 .IsRequired();
 

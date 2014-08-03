@@ -39,9 +39,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageKindSetting.cs" />
-    <Compile Include="MessageKindSettingList.cs" />
+    <Compile Include="HorizontalAlignment.cs" />
+    <Compile Include="InformationKind\InformationColumn.cs" />
+    <Compile Include="InformationKind\InformationData.cs" />
+    <Compile Include="InformationKind\InformationDataList.cs" />
+    <Compile Include="InformationKind\InformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataEightColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataFiveColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataFourColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataNineColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataOneColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataSevenColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataSixColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataTenColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataThreeColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TabularDataTwoColumnInformationKind.cs" />
+    <Compile Include="InformationKind\TextInformationKind.cs" />
+    <Compile Include="MessageKind\InformationMessageKind.cs" />
+    <Compile Include="MessageKind\MessageKindSetting.cs" />
+    <Compile Include="MessageKind\MessageKindSettingList.cs" />
     <Compile Include="MessageKind\HTMLMessageKind.cs" />
+    <Compile Include="MessageKind\ImageMessageKind.cs" />
     <Compile Include="MessageKind\MessageKind.cs" />
     <Compile Include="MessageKind\RSSFeedMessageKind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

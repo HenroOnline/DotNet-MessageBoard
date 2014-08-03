@@ -11,15 +11,13 @@ namespace MessageBoard.DAL.Configuration
 	{
 		public BoardSlideConfiguration ()
 		{
-			if (!string.IsNullOrEmpty(MessageBoardContext.SchemaName))
-			{
-				this.ToTable("BoardSlide", MessageBoardContext.SchemaName);
-			}
-
+			this.ToTable("BoardSlide", MessageBoardContext.SchemaName);
+			
 			this.HasRequired(bs => bs.Board);
 			this.HasRequired(bs => bs.Slide);
-
-			this.Property(bs => bs.Sequence).IsRequired();		
+			
+			this.Property(bs => bs.Sequence).IsRequired();
+			this.Property(bs => bs.Duration).IsRequired();		
 		}
 	}
 }

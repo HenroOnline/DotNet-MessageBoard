@@ -17,6 +17,10 @@ namespace MessageBoard.Web.Management.Models.Slide
 
 		public List<MessageKindModel> MessageKindList { get; set; }
 
+		public List<SelectListItem> InformationHeaderDropDownList { get; set; }
+
+		public List<InformationHeaderModel> InformationHeaderList { get; set; }
+
 		public MessageDetailViewModel()
 		{
 			Menu = "Slide";
@@ -42,7 +46,8 @@ namespace MessageBoard.Web.Management.Models.Slide
 			{
 				dbLayer = LayerRepository.Instance.Select(layerId);
 			}
-			else{
+			else
+			{
 				dbLayer = LayerRepository.Instance.Select(dbMessage.LayerId);
 			}
 
@@ -54,7 +59,7 @@ namespace MessageBoard.Web.Management.Models.Slide
 			result.MessageKindList = new List<MessageKindModel>();
 
 			result.MessageKindDropDownList.Add(new SelectListItem());
-			
+
 			foreach (var messageKind in MessageKind.List)
 			{
 				result.MessageKindDropDownList.Add(new SelectListItem
@@ -64,6 +69,19 @@ namespace MessageBoard.Web.Management.Models.Slide
 					});
 
 				result.MessageKindList.Add(MessageKindModel.Create(messageKind, dbMessage.Id, messageKind.Key == dbMessage.MessageKind));
+			}
+
+			result.InformationHeaderDropDownList = new List<SelectListItem>();
+			result.InformationHeaderList = new List<InformationHeaderModel>();
+			foreach (var informationHeader in InformationHeaderRepository.Instance.ListOrderedByName())
+			{
+				result.InformationHeaderDropDownList.Add(new SelectListItem
+					{
+						Text = informationHeader.Name,
+						Value = informationHeader.Id.ToString()
+					});
+
+				result.InformationHeaderList.Add(InformationHeaderModel.Create(informationHeader, false));
 			}
 
 			result.AddCrumblePath("Slides", "~/Slide");
@@ -108,7 +126,7 @@ namespace MessageBoard.Web.Management.Models.Slide
 				{
 					dbSetting = new DAL.Entity.Setting();
 					dbSetting.MessageId = dbMessage.Id;
-					dbSetting.Key = setting.Key;					
+					dbSetting.Key = setting.Key;
 				}
 				dbSetting.StringValue = setting.Value;
 				SettingRepository.Instance.Save(dbSetting);

@@ -21,9 +21,14 @@ namespace MessageBoard.Web.Display.Models.Board
 
 			var result = new IndexViewModel();
 			result.Slides = new List<SlideModel>();
-			foreach (var slide in SlideRepository.Instance.ListByBoard(board.Id))
+			foreach (var bs in BoardSlideRepository.Instance.ListByBoard(board.Id))
 			{
-				result.Slides.Add(SlideModel.Create(slide));
+				result.Slides.Add(SlideModel.Create(bs));
+			}
+
+			if (result.Slides.Any())
+			{
+				result.Slides[0].FirstSlide = true;
 			}
 			
 			return result;

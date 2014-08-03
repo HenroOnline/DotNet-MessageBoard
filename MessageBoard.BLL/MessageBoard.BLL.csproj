@@ -50,6 +50,8 @@
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\BoardRepository.cs" />
     <Compile Include="Repositories\BoardSlideRepository.cs" />
+    <Compile Include="Repositories\InformationDataRepository.cs" />
+    <Compile Include="Repositories\InformationHeaderRepository.cs" />
     <Compile Include="Repositories\LayerRepository.cs" />
     <Compile Include="Repositories\MessageRepository.cs" />
     <Compile Include="Repositories\SettingRepository.cs" />

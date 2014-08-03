@@ -33,7 +33,7 @@ namespace MessageBoard.Web.Management.Models
 		public BaseViewModel()
 		{
 			CrumblePath = new List<System.Web.UI.Pair>();
-
+			Menu = string.Empty;
 		}
 	}
 }

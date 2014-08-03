@@ -11,12 +11,17 @@ namespace MessageBoard.Web.Display.Models.Entities
 	{
 		public List<LayerModel> Layers { get; set; }
 
-		public static SlideModel Create(Slide slide)
+		public bool FirstSlide { get; set; }
+
+		public int Duration { get; set; }
+
+		public static SlideModel Create(BoardSlide boardSlide)
 		{
 			var result = new SlideModel();
 			result.Layers = new List<LayerModel>();
-			
-			foreach (var layer in LayerRepository.Instance.ListBySlide(slide.Id))
+			result.Duration = boardSlide.Duration;
+
+			foreach (var layer in LayerRepository.Instance.ListBySlide(boardSlide.Slide.Id))
 			{
 				result.Layers.Add(LayerModel.Create(layer));
 			}

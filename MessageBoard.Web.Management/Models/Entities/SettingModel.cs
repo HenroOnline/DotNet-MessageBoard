@@ -1,4 +1,5 @@
 ﻿using MessageBoard.BLL.Repositories;
+using MessageBoard.Core.MessageKind;
 using MessageBoard.Core;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using MessageBoard.Core;
+﻿using MessageBoard.Core.MessageKind;
 using MessageBoard.DAL.Entity;
 using System;
 using System.Collections.Generic;
