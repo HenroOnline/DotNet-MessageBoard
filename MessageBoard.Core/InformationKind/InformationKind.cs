@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Compilation;
 
 namespace MessageBoard.Core.InformationKind
 {
@@ -55,7 +56,7 @@ namespace MessageBoard.Core.InformationKind
 				{
 					list = new List<InformationKind>();
 
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+					foreach (Assembly assembly in BuildManager.GetReferencedAssemblies())
 					{
 						var informationKindBaseType = typeof(InformationKind);
 						foreach (var assemblyType in assembly.GetTypes())

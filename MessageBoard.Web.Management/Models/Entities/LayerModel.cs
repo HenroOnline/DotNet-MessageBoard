@@ -31,7 +31,7 @@ namespace MessageBoard.Web.Management.Models.Entities
 		public int Rows { get; set; }
 
 		[Required(ErrorMessage = "{0} is verplicht")]
-		[Display(Name = "Volgorde")]
+		[Display(Name = "Z-index")]
 		public int Sequence { get; set; }
 
 		public static LayerModel Create(MessageBoard.DAL.Entity.Layer layer, MessageBoard.DAL.Entity.Slide slide)

@@ -39,6 +39,7 @@
 			{
 				var inputTextBoxes = $("input", dataContainer);
 				var hiddenInputCounter = 0;
+				
 				for (var i = 0; i < inputTextBoxes.length; i++) {
 					var inputTextBox = $(inputTextBoxes[i]);
 					if (inputTextBox.val().length == 0)
@@ -57,7 +58,7 @@
 
 					hiddenInputCounter += 1;
 				}
-
+				
 				if (scriptInput.length > 0)
 				{
 					scriptInput = '<script type="text/javascript">' + scriptInput + "<\/script>"
@@ -75,9 +76,46 @@
 
 			// Prevent unnecessary post data
 			$("div[data-informationkind]").remove();
+		});
 
+		$("div[data-informationkind] input:last-child").blur(function () {
+			
+		});
+
+		$("div[data-informationkind]").on("focus", "input", function () {
+			var inputElement = $(this);
+			var tbody = inputElement.closest("tbody");
+			var rowCount = tbody.children().length;
+			
+			var row = inputElement.closest("tr");
+			
+			if (row.index() == rowCount - 1)
+			{
+				AddNewRow(tbody, row);
+			}
 		});
 	});
+
+	function AddNewRow(tbody)
+	{
+		var duplicatedRow = tbody.children(":last").clone();
+		var rowIndex = tbody.children().length;
+		
+		var dataContainer = tbody.closest("div[data-informationkind]");
+		
+		var idPrefix = dataContainer.attr("data-informationkind").replace(/\./g, "_");
+
+		$("input", duplicatedRow).each(function () {
+			var inputElement = $(this);			
+
+			inputElement.attr("data-row", rowIndex)
+			inputElement.attr("id", idPrefix + "_" + rowIndex + "_" + inputElement.attr("data-column"));
+			inputElement.attr("name", "");
+			inputElement.val("");
+		});
+
+		duplicatedRow.appendTo(tbody);
+	}
 
 </script>
 
@@ -110,7 +148,7 @@
 			@Html.ValidationSummary(false)
 			<p>
 				<button type="submit" name="action" value="save" class="btn btn-primary">Opslaan</button>
-				<a href="~/Slide/" class="btn btn-warning" role="button">Annuleren</a>
+				<a href="~/Information/" class="btn btn-warning" role="button">Annuleren</a>
 				@if (Model.InformationHeader.Id != 0)
 				{
 					<button type="submit" name="action" value="delete" class="cancel btn btn-danger">Verwijderen</button>

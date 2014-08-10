@@ -216,6 +216,10 @@
       <Project>{7a796f95-84ac-4f6d-bf69-6045f5472096}</Project>
       <Name>MessageBoard.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MessageBoard.HervormdRouveen\MessageBoard.HervormdRouveen.csproj">
+      <Project>{f0fa7124-2cb3-4dd7-bc23-6e0b062c3c7c}</Project>
+      <Name>MessageBoard.HervormdRouveen</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

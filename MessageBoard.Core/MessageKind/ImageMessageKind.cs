@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessageBoard.Core.InformationKind;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,7 @@ namespace MessageBoard.Core.MessageKind
 			}
 		}
 
-		public override string RenderHTML(MessageKindSettingList settings)
+		public override string RenderHTML(MessageKindSettingList settings, IInformationRepository informationRepository)
 		{
 			var imageUrl = settings["ImageUrl"];
 

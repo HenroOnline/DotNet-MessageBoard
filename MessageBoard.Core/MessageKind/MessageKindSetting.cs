@@ -28,6 +28,16 @@ namespace MessageBoard.Core.MessageKind
 			}
 		}
 
+		public int IntValue
+		{
+			get
+			{
+				int result;
+				int.TryParse(StringValue, out result);
+				return result;
+			}
+		}
+
 		public static MessageKindSetting Create(string key, string name, SettingKind settingKind)
 		{
 			return new MessageKindSetting

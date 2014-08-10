@@ -39,7 +39,7 @@ namespace MessageBoard.Web.Display.Models.Entities
 
 			var messageKind = MessageBoard.Core.MessageKind.MessageKind.Select(message.MessageKind);
 			var settings = SettingRepository.Instance.ListAsMessageKindSetting(message.Id);
-			result.Value = MvcHtmlString.Create(messageKind.RenderHTML(settings));
+			result.Value = MvcHtmlString.Create(messageKind.RenderHTML(settings, InformationDataRepository.Instance));
 
 			return result;
 		}

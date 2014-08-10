@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MessageBoard.Core.InformationKind;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Compilation;
 
 namespace MessageBoard.Core.MessageKind
 {
@@ -12,7 +14,7 @@ namespace MessageBoard.Core.MessageKind
 		public string Key { get; internal set; }
 		public abstract string Title { get; }
 
-		public virtual string RenderHTML(MessageKindSettingList settings)
+		public virtual string RenderHTML(MessageKindSettingList settings, IInformationRepository informationRepository)
 		{
 			return string.Empty;
 		}
@@ -28,7 +30,7 @@ namespace MessageBoard.Core.MessageKind
 				{
 					list = new List<MessageKind>();
 
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+					foreach (Assembly assembly in BuildManager.GetReferencedAssemblies())
 					{
 						var messageKindBaseType = typeof(MessageKind);
 						foreach (var assemblyType in assembly.GetTypes())

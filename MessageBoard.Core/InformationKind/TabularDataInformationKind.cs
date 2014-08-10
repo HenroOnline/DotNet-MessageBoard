@@ -73,15 +73,15 @@ namespace MessageBoard.Core.InformationKind
 			var rowCount = informationData.Max(id => id.Row);
 
 			var result = new StringBuilder();
-			result.Append(string.Format("<table class=\"{0}\">", Key));
-			for (var rowIndex = 0; rowIndex < rowCount; rowIndex++ )
+			result.Append(string.Format("<table class=\"table {0}\">", Key.Replace(".", "_")));
+			for (var rowIndex = 0; rowIndex <= rowCount; rowIndex++ )
 			{
 				result.Append("<tr>");
 				for (var columnIndex = 0; columnIndex < ColumnCount; columnIndex++)
 				{					
 					var columnData = informationData.FirstOrDefault(id => id.Row == rowIndex && id.Column == columnIndex);
 					var additionalClass = string.Empty;
-					var content = string.Empty;
+					var content = "&nbsp;";
 					if (columnData != null)
 					{
 						content = columnData.Content;

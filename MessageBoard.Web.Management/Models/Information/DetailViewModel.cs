@@ -53,28 +53,31 @@ namespace MessageBoard.Web.Management.Models.Information
 			InformationHeader.Id = dbInformationHeader.Id;
 
 			var currentData = InformationDataRepository.Instance.ListByHeader(dbInformationHeader.Id);
-			foreach (var newData in InformationHeader.InformationData)
+			if (InformationHeader.InformationData != null)
 			{
-				if (string.IsNullOrWhiteSpace(newData.Content))
+				foreach (var newData in InformationHeader.InformationData)
 				{
-					continue;
-				}
+					if (string.IsNullOrWhiteSpace(newData.Content))
+					{
+						continue;
+					}
 
-				var dataRecord = currentData.FirstOrDefault(dr => dr.Row == newData.Row && dr.Column == newData.Column);
-				if (dataRecord != null)
-				{
-					currentData.Remove(dataRecord);
-				}
-				else
-				{
-					dataRecord = InformationDataRepository.Instance.NewEntity();
-					dataRecord.InformationHeaderId = dbInformationHeader.Id;
-					dataRecord.Row = newData.Row;
-					dataRecord.Column = newData.Column;
-				}
-				dataRecord.Content = newData.Content;
+					var dataRecord = currentData.FirstOrDefault(dr => dr.Row == newData.Row && dr.Column == newData.Column);
+					if (dataRecord != null)
+					{
+						currentData.Remove(dataRecord);
+					}
+					else
+					{
+						dataRecord = InformationDataRepository.Instance.NewEntity();
+						dataRecord.InformationHeaderId = dbInformationHeader.Id;
+						dataRecord.Row = newData.Row;
+						dataRecord.Column = newData.Column;
+					}
+					dataRecord.Content = newData.Content;
 
-				InformationDataRepository.Instance.Save(dataRecord);
+					InformationDataRepository.Instance.Save(dataRecord);
+				}
 			}
 
 			foreach (var dataRecord in currentData)

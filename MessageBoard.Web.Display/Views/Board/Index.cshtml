@@ -56,3 +56,17 @@
 		});
 	</script>
 }
+
+@if (Model.RefreshPageInterval != 0)
+{ 
+	<script>
+		$(function () {
+			setTimeout(refreshPage, @Model.RefreshPageInterval * 1000);
+		});
+
+		function refreshPage()
+		{
+			window.location.href = window.location.href;
+		}
+	</script>
+}

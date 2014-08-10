@@ -2,6 +2,7 @@
 using MessageBoard.Web.Display.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 
@@ -10,6 +11,10 @@ namespace MessageBoard.Web.Display.Models.Board
 	public class IndexViewModel
 	{
 		public List<SlideModel> Slides { get; set; }
+
+		public int RefreshPageInterval { get; set; }
+
+
 
 		public static IndexViewModel Create(string key)
 		{
@@ -30,6 +35,11 @@ namespace MessageBoard.Web.Display.Models.Board
 			{
 				result.Slides[0].FirstSlide = true;
 			}
+
+			var rawRefreshPageInterval = ConfigurationManager.AppSettings["RefreshPageInterval"];
+			int refreshPageInterval;
+			int.TryParse(rawRefreshPageInterval, out refreshPageInterval);
+			result.RefreshPageInterval = refreshPageInterval;
 			
 			return result;
 		}

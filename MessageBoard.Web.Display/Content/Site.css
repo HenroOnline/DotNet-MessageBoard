@@ -1,3 +1,86 @@
 ﻿body {
-    font-size: x-large;
+	font-size: xx-large;		
+	overflow: hidden;
+}
+
+.MessageBoard_Core_InformationKind_TabularDataOneColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataTwoColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataThreeColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataFourColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataFiveColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataSixColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataSevenColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataEightColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataNineColumnInformationKind,
+.MessageBoard_Core_InformationKind_TabularDataTenColumnInformationKind
+{
+	width: 100%;
+	table-layout: fixed;	
+}
+
+.MessageBoard_Core_InformationKind_TabularDataOneColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataTwoColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataThreeColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataFourColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataFiveColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataSixColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataSevenColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataEightColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataNineColumnInformationKind td,
+.MessageBoard_Core_InformationKind_TabularDataTenColumnInformationKind td
+{
+	/*border: 1px solid rgba(66, 139, 202, 0.1);*/	
+}
+
+.MessageBoard_Core_InformationKind_TabularDataTwoColumnInformationKind td
+{
+	width: 50%;
+}
+.MessageBoard_Core_InformationKind_TabularDataThreeColumnInformationKind td
+{
+	width: calc(100% / 3);	
+}
+.MessageBoard_Core_InformationKind_TabularDataFourColumnInformationKind td
+{
+	width: 25%;	
+}
+.MessageBoard_Core_InformationKind_TabularDataFiveColumnInformationKind td
+{
+	width: 20%;
+}
+.MessageBoard_Core_InformationKind_TabularDataSixColumnInformationKind td
+{
+	width: calc(100% / 6);	
+}
+.MessageBoard_Core_InformationKind_TabularDataSevenColumnInformationKind td
+{
+	width: calc(100% / 7);	
+}
+.MessageBoard_Core_InformationKind_TabularDataEightColumnInformationKind td
+{
+	width: calc(100% / 8);	
+}
+.MessageBoard_Core_InformationKind_TabularDataNineColumnInformationKind td
+{
+	width: calc(100% / 9);	
+}
+.MessageBoard_Core_InformationKind_TabularDataTenColumnInformationKind td
+{
+	width: 10%;
+}
+
+.MessageBoard_HervormdRouveen_InformationKind_RoomAllocationInformationKind td
+{
+	padding-left: 1em;
+}
+
+.MessageBoard_HervormdRouveen_InformationKind_RoomAllocationInformationKind .remark
+{
+	font-style: italic;
+	padding-left: 1em;
+}
+
+.panel
+{
+	background: rgba(255, 255, 255, 0.7);
 }

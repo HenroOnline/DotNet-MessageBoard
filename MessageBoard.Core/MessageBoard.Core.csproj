@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HorizontalAlignment.cs" />
+    <Compile Include="InformationKind\IInformationRepository.cs" />
     <Compile Include="InformationKind\InformationColumn.cs" />
     <Compile Include="InformationKind\InformationData.cs" />
     <Compile Include="InformationKind\InformationDataList.cs" />
