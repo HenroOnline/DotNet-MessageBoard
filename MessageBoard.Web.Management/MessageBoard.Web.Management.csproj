@@ -529,6 +529,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleLogic.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -536,6 +537,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\Board\DetailViewModel.cs" />
     <Compile Include="Models\Board\IndexViewModel.cs" />
@@ -624,6 +626,7 @@
     <Content Include="Scripts\Libraries\responsivefilemanager\filemanager\uploader\success.php" />
     <Content Include="Views\Information\Index.cshtml" />
     <Content Include="Views\Information\Detail.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

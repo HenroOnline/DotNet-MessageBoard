@@ -12,6 +12,14 @@ namespace MessageBoard.Web.Management.Models
 		public List<System.Web.UI.Pair> CrumblePath { get; set; }
 		public System.Web.UI.Pair CurrentPage { get; set; }
 
+		public bool ShowSignOutLink
+		{
+			get
+			{
+				return !string.IsNullOrEmpty(HttpContext.Current.User.Identity.Name);
+			}
+		}
+
 		public void AddCrumblePath(string name, string url)
 		{
 			if (CurrentPage != null)

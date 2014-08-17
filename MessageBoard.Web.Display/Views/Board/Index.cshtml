@@ -37,10 +37,12 @@
 
 		function switchSlide(oldSlide, newSlide)
 		{
-			oldSlide.hide();
-			newSlide.show(function () {
-				setSlideTimeout(newSlide);
-			});
+			oldSlide.fadeToggle( "slow", "linear", function()
+			{
+				newSlide.fadeToggle( "slow", "linear", function () {
+					setSlideTimeout(newSlide);
+				});	
+			});			
 		}
 
 		function setSlideTimeout(slide)

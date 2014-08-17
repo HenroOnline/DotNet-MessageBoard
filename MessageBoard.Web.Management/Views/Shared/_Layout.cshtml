@@ -32,6 +32,14 @@
 					<li @Html.Raw((Model.Menu.ToLower() == "slide") ? "class=\"active\"" : "")><a href="~/Slide/">Slides</a></li>
 					<li @Html.Raw((Model.Menu.ToLower() == "information") ? "class=\"active\"" : "")><a href="~/Information/">Informatie</a></li>
 				</ul>
+				@if (Model.ShowSignOutLink)
+				{ 
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a href="~/Account/SignOut">Uitloggen</a>
+						</li>
+					</ul>
+				}
 			</div>
 		</div>
 	</div>

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace MessageBoard.Web.Management.Controllers
 {
+	[Authorize]
 	public class BoardController : Controller
 	{
 		public ActionResult Index()

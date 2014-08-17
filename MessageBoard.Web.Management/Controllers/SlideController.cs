@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace MessageBoard.Web.Management.Controllers
 {
+	[Authorize]
 	public class SlideController : Controller
 	{
 		public ActionResult Index()
