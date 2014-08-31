@@ -17,8 +17,10 @@ namespace MessageBoard.Web.Display.Models.Board
 		public int RefreshPageInterval { get; set; }
 
 		public string ManagementBaseUrl { get; set; }
+
+		public string DisplayBaseUrl { get; set; }
 		
-		public static IndexViewModel Create(string key)
+		public static IndexViewModel Create(string key, string path)
 		{
 			var board = BoardRepository.Instance.SelectByKey(key);
 			if (board == null)
@@ -44,6 +46,8 @@ namespace MessageBoard.Web.Display.Models.Board
 			int.TryParse(rawRefreshPageInterval, out refreshPageInterval);
 			result.RefreshPageInterval = refreshPageInterval;
 			result.ManagementBaseUrl = ConfigurationManager.AppSettings["ManagementBaseUrl"];
+			result.DisplayBaseUrl = path;
+			
 			
 			return result;
 		}

@@ -19,7 +19,8 @@
 	<script>
 		function refreshPage()
 		{
-			window.location.href = window.location.href;
+			// Prevent caching...
+			window.location.href = '@Model.DisplayBaseUrl' + '?ts=' + new Date().getTime();
 		}
 	</script>
 
