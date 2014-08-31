@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MessageBoard.Web.Management.Hubs;
+using MessageBoard.Web.Management.Models.Home;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,16 +11,17 @@ namespace MessageBoard.Web.Management.Controllers
 	[Authorize]
 	public class HomeController : Controller
 	{
-		//
-		// GET: /Home/
 		public ActionResult Index()
-		{
-			return View();
+		{			
+			return View(IndexViewModel.Create());
 		}
 
-		public ActionResult Example()
+		[HttpPost]
+		public ActionResult Index(IndexViewModel model)
 		{
-			return View();
+			ContentBroadCaster.Instance.UpdateContent(model.SelectedBoardId);
+
+			return View(IndexViewModel.Create());
 		}
 	}
 }

@@ -1,1 +1,39 @@
-﻿
+﻿@model MessageBoard.Web.Management.Models.Home.IndexViewModel
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+	<script>
+		$(function () {
+			$("button[data-boardid]").click(function () {
+				$("#@Html.IdFor(m => m.SelectedBoardId)").val($(this).attr("data-boardid"));
+				$("form").submit();
+			});
+		});
+	</script>
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.SelectedBoardId)
+	<ul class="list-group">
+		@foreach (var b in Model.Boards)
+		{
+			<li class="list-group-item">
+				<div class="row">
+					<div class="col-sm-11">
+						<div>
+							<h4 class="list-group-item-heading">@b.Description</h4>
+						</div>
+					</div><!-- /.col-sm-11 -->
+					<div class="col-sm-1">
+						<button type="button" class="btn btn-success btn-sm" title="Scherm refreshen" data-boardid="@b.Id">
+							<span class="glyphicon glyphicon-cloud-upload"></span>
+						</button>
+					</div>
+				</div>
+			</li>
+		}
+	</ul>
+	<p>
+		<button type="button" class="btn btn-success btn-sm" title="Alle schermen refreshen" data-boardid="0">
+			<span class="glyphicon glyphicon-cloud-upload"></span>
+			Alle schermen refreshen
+		</button>
+	</p>
+}

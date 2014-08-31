@@ -1,0 +1,25 @@
+﻿@model MessageBoard.Web.Management.Models.Account.LoginViewModel
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{ 
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Login</h4>
+			@Html.AntiForgeryToken()
+			<div class="input-group">
+				@Html.LabelFor(m => m.Username)
+				@Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Gebruikersnaam", autofocus = "autofocus" })
+			</div>
+			<br />
+			<div class="input-group">
+				@Html.LabelFor(m => m.Password)
+				@Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Wachtwoord" })
+			</div>
+			<br />
+			@Html.ValidationSummary(false)
+			<p>
+				<button type="submit" name="action" value="save" class="btn btn-primary">Login</button>			
+			</p>
+		</div>
+	</div>
+}

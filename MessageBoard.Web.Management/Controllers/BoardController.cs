@@ -1,4 +1,5 @@
-﻿using MessageBoard.Web.Management.Models;
+﻿using MessageBoard.Web.Management.Hubs;
+using MessageBoard.Web.Management.Models;
 using MessageBoard.Web.Management.Models.Board;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,8 @@ namespace MessageBoard.Web.Management.Controllers
 						if (isNew)
 						{
 							return RedirectToAction("Detail", new { id = model.Board.Id });
-						}
+						}								
+
 						return RedirectToAction("Index");
 					}
 					break;
