@@ -12,6 +12,7 @@ namespace MessageBoard.Web.Display.App_Start
 		{
 			var scriptBundle = new ScriptBundle("~/Scripts");
 			scriptBundle.Include("~/Scripts/jquery-2.1.1.min.js");
+			scriptBundle.Include("~/Scripts/jquery.signalR-2.1.1.min.js");			
 			bundles.Add(scriptBundle);
 
 			var styleBundle = new StyleBundle("~/Content/css");

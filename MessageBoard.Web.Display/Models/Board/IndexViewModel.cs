@@ -10,12 +10,14 @@ namespace MessageBoard.Web.Display.Models.Board
 {
 	public class IndexViewModel
 	{
+		public int BoardId { get; set; }
+
 		public List<SlideModel> Slides { get; set; }
 
 		public int RefreshPageInterval { get; set; }
 
-
-
+		public string ManagementBaseUrl { get; set; }
+		
 		public static IndexViewModel Create(string key)
 		{
 			var board = BoardRepository.Instance.SelectByKey(key);
@@ -25,6 +27,7 @@ namespace MessageBoard.Web.Display.Models.Board
 			}
 
 			var result = new IndexViewModel();
+			result.BoardId = board.Id;
 			result.Slides = new List<SlideModel>();
 			foreach (var bs in BoardSlideRepository.Instance.ListByBoard(board.Id))
 			{
@@ -40,6 +43,7 @@ namespace MessageBoard.Web.Display.Models.Board
 			int refreshPageInterval;
 			int.TryParse(rawRefreshPageInterval, out refreshPageInterval);
 			result.RefreshPageInterval = refreshPageInterval;
+			result.ManagementBaseUrl = ConfigurationManager.AppSettings["ManagementBaseUrl"];
 			
 			return result;
 		}

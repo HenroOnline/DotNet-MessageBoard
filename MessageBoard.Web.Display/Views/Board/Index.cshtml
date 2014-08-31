@@ -14,61 +14,92 @@
 		}
 	</div>
 }
-
-@if (Model.Slides.Count > 1)
-{ 
+@section scripts
+{	
 	<script>
-		function rotateSlide()
-		{
-			var availableSlides = $("div[data-slide]");
-			var currentVisibleSlide = availableSlides.filter(":visible");
-					
-			var currentIndex = availableSlides.index(currentVisibleSlide);
-
-			if (currentIndex == availableSlides.length - 1)
-			{
-				switchSlide(currentVisibleSlide, $(availableSlides[0]));
-			}
-			else
-			{
-				switchSlide(currentVisibleSlide, $(availableSlides[currentIndex + 1]));
-			}
-		}
-
-		function switchSlide(oldSlide, newSlide)
-		{
-			oldSlide.fadeToggle( "slow", "linear", function()
-			{
-				newSlide.fadeToggle( "slow", "linear", function () {
-					setSlideTimeout(newSlide);
-				});	
-			});			
-		}
-
-		function setSlideTimeout(slide)
-		{
-			var durationInSeconds = parseInt(slide.attr("data-duration")) * 1000;
-			setTimeout(rotateSlide, durationInSeconds);
-		}
-
-		$(function () {
-			var availableSlides = $("div[data-slide]");
-			var currentVisibleSlide = availableSlides.filter(":visible");
-			setSlideTimeout(currentVisibleSlide);
-		});
-	</script>
-}
-
-@if (Model.RefreshPageInterval != 0)
-{ 
-	<script>
-		$(function () {
-			setTimeout(refreshPage, @Model.RefreshPageInterval * 1000);
-		});
-
 		function refreshPage()
 		{
 			window.location.href = window.location.href;
 		}
 	</script>
-}
+
+	@if (Model.Slides.Count > 1)
+	{ 
+		<script>
+			function rotateSlide()
+			{
+				var availableSlides = $("div[data-slide]");
+				var currentVisibleSlide = availableSlides.filter(":visible");
+					
+				var currentIndex = availableSlides.index(currentVisibleSlide);
+
+				if (currentIndex == availableSlides.length - 1)
+				{
+					switchSlide(currentVisibleSlide, $(availableSlides[0]));
+				}
+				else
+				{
+					switchSlide(currentVisibleSlide, $(availableSlides[currentIndex + 1]));
+				}
+			}
+
+			function switchSlide(oldSlide, newSlide)
+			{
+				oldSlide.fadeToggle( "slow", "linear", function()
+				{
+					newSlide.fadeToggle( "slow", "linear", function () {
+						setSlideTimeout(newSlide);
+					});	
+				});		
+			}
+
+			function setSlideTimeout(slide)
+			{
+				var durationInSeconds = parseInt(slide.attr("data-duration")) * 1000;
+				setTimeout(rotateSlide, durationInSeconds);
+			}
+
+			$(function () {
+				var availableSlides = $("div[data-slide]");
+				var currentVisibleSlide = availableSlides.filter(":visible");
+				setSlideTimeout(currentVisibleSlide);
+			});
+		</script>
+	}
+
+	@if (Model.RefreshPageInterval != 0)
+	{ 
+		<script>
+			$(function () {
+				setTimeout(refreshPage, @Model.RefreshPageInterval * 1000);
+			});
+		</script>
+	}
+	
+	<script src="@Model.ManagementBaseUrl/signalr/hubs"></script>
+	<!--SignalR script to update the chat page and send messages.-->
+	<script>
+		$(function () {
+			$.connection.hub.url = "@Model.ManagementBaseUrl/signalr/hubs";
+
+			var content = $.connection.contentHub;
+			
+			content.client.refreshContent = function (boardId) {
+				// Add the message to the page.
+				if (boardId == 0 || boardId == @Model.BoardId)
+				{
+					refreshPage();
+				}
+			};
+
+			// Start the connection.
+			$.connection.hub.start();
+			
+			$.connection.hub.disconnected(function() {
+				setTimeout(function() {
+					$.connection.hub.start();
+				}, 5000); // Restart connection after 5 seconds.
+			});
+		});
+	</script>
+	}
