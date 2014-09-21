@@ -392,7 +392,7 @@
     <Content Include="Scripts\Libraries\tinymce\plugins\responsivefilemanager\img\insertfile.gif" />
     <Content Include="Scripts\Libraries\tinymce\plugins\responsivefilemanager\plugin.js" />
     <Content Include="Scripts\Libraries\tinymce\plugins\responsivefilemanager\plugin.min.js" />
-    <Content Include="Scripts\Site.js" />
+    <Content Include="Scripts\site.js" />
     <Content Include="Scripts\Libraries\tinymce\license.txt" />
     <Content Include="Scripts\Libraries\tinymce\plugins\advlist\plugin.js" />
     <Content Include="Scripts\Libraries\tinymce\plugins\advlist\plugin.min.js" />

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="HorizontalAlignment.cs" />
     <Compile Include="InformationKind\IInformationRepository.cs" />
+    <Compile Include="InformationKind\ImageListInformationKind.cs" />
     <Compile Include="InformationKind\InformationColumn.cs" />
     <Compile Include="InformationKind\InformationData.cs" />
     <Compile Include="InformationKind\InformationDataList.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="InformationKind\TabularDataThreeColumnInformationKind.cs" />
     <Compile Include="InformationKind\TabularDataTwoColumnInformationKind.cs" />
     <Compile Include="InformationKind\TextInformationKind.cs" />
+    <Compile Include="MessageKind\ImageCarouselMessageKind.cs" />
     <Compile Include="MessageKind\InformationMessageKind.cs" />
     <Compile Include="MessageKind\MessageKindSetting.cs" />
     <Compile Include="MessageKind\MessageKindSettingList.cs" />

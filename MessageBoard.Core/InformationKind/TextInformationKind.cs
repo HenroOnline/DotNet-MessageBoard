@@ -17,7 +17,7 @@ namespace MessageBoard.Core.InformationKind
 		{
 			get { return true; }
 		}
-		
+
 		public override string RenderHTML(InformationDataList informationData)
 		{
 			if (informationData.Count != 1)

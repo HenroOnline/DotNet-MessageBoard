@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MessageBoard.Web.Display.Models.Board
 {
@@ -19,6 +21,10 @@ namespace MessageBoard.Web.Display.Models.Board
 		public string ManagementBaseUrl { get; set; }
 
 		public string DisplayBaseUrl { get; set; }
+
+		public MvcHtmlString GlobalScripts { get; set; }
+
+		public MvcHtmlString InstanceScripts { get; set; }
 		
 		public static IndexViewModel Create(string key, string path)
 		{
@@ -47,7 +53,27 @@ namespace MessageBoard.Web.Display.Models.Board
 			result.RefreshPageInterval = refreshPageInterval;
 			result.ManagementBaseUrl = ConfigurationManager.AppSettings["ManagementBaseUrl"];
 			result.DisplayBaseUrl = path;
-			
+
+
+			// Retrieve all scripts
+			var instanceScripts = new StringBuilder();
+			var globalScripts = new Dictionary<string, string>();
+			foreach (var m in result.Slides.SelectMany(s => s.Layers.SelectMany(l => l.Messages)))
+			{
+				instanceScripts.Append(m.InstanceScript);
+
+				if (!string.IsNullOrWhiteSpace(m.GlobalScript) && !globalScripts.ContainsKey(m.Key))
+				{
+					globalScripts.Add(m.Key, m.GlobalScript);
+				}
+			}
+
+			result.InstanceScripts = new MvcHtmlString(instanceScripts.ToString());
+
+			if (globalScripts.Values.Any())
+			{
+				result.GlobalScripts = new MvcHtmlString(globalScripts.Values.Aggregate((s1, s2) => s1 + s2));
+			}
 			
 			return result;
 		}

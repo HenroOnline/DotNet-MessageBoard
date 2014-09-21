@@ -14,7 +14,17 @@ namespace MessageBoard.Core.MessageKind
 		public string Key { get; internal set; }
 		public abstract string Title { get; }
 
-		public virtual string RenderHTML(MessageKindSettingList settings, IInformationRepository informationRepository)
+		public virtual string RenderGlobalScript()
+		{
+			return string.Empty;
+		}
+
+		public virtual string RenderInstanceScript(int messageId, MessageKindSettingList settings)
+		{
+			return string.Empty;
+		}
+
+		public virtual string RenderHTML(int messageId, MessageKindSettingList settings, IInformationRepository informationRepository)
 		{
 			return string.Empty;
 		}

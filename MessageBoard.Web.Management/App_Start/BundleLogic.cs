@@ -21,7 +21,7 @@ namespace MessageBoard.Web.Management.App_Start
 			scriptBundle.Include("~/Scripts/Libraries/jquery-ui.min.js");			
 			scriptBundle.Include("~/Scripts/Libraries/tinymce/tinymce.min.js");
 			scriptBundle.Include("~/Scripts/jquery.signalR-2.1.1.min.js");			
-			scriptBundle.Include("~/Scripts/Site.js");
+			scriptBundle.Include("~/Scripts/site.js");
 			
 			bundles.Add(scriptBundle);
 

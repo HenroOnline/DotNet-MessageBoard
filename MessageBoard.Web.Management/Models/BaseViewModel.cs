@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 
@@ -38,10 +39,14 @@ namespace MessageBoard.Web.Management.Models
 			};
 		}
 
+		public string FileManagerUrl { get; set; }
+
 		public BaseViewModel()
 		{
 			CrumblePath = new List<System.Web.UI.Pair>();
 			Menu = string.Empty;
+
+			FileManagerUrl = ConfigurationManager.AppSettings["FileManagerUrl"];
 		}
 	}
 }

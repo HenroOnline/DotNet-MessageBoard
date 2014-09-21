@@ -12,6 +12,12 @@
 
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/Scripts")
+
+	<script>
+		$(function () {
+			messageBoard.init("@Model.FileManagerUrl");
+		});
+	</script>
 </head>
 
 <body role="document">
