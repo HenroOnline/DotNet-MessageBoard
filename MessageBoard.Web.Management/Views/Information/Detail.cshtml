@@ -78,10 +78,6 @@
 			$("div[data-informationkind]").remove();
 		});
 
-		$("div[data-informationkind] input:last-child").blur(function () {
-			
-		});
-
 		$("div[data-informationkind]").on("focus", "input", function () {
 			var inputElement = $(this);
 			var tbody = inputElement.closest("tbody");
@@ -93,6 +89,22 @@
 			{
 				AddNewRow(tbody, row);
 			}
+		});
+		
+		$(window).on('message', fileManagerDialogCallback);
+
+		$("[data-role=informationcontent]").on("click", "a[data-role=image-picker]", function () {
+			var inputElement = $("input", $(this).closest(".input-group"));
+
+			var fileManagerDialogUrl = '@Model.FileManagerUrl' + 'dialog.php?type=1&crossdomain=1&field_id=' + inputElement.attr("id");
+
+			$.fancybox.open({
+				'href': fileManagerDialogUrl,
+				'width': 900,
+				'height': 600,
+				'type': 'iframe',
+				'autoScale': false
+			});
 		});
 	});
 
@@ -115,6 +127,22 @@
 		});
 
 		duplicatedRow.appendTo(tbody);
+	}
+
+	// Handler for a message from ResponsiveFilemanager
+	function fileManagerDialogCallback(e) {
+		var event = e.originalEvent;
+		// Make sure the sender of the event is trusted
+		if (event.data.sender === 'responsivefilemanager') {			
+			if (event.data.field_id) {
+				
+				var fieldID=event.data.field_id;
+				var url=event.data.url;
+				$('#'+fieldID).val(url).trigger('change');
+				
+			}
+			$.fancybox.close();
+		}
 	}
 
 </script>
@@ -157,19 +185,20 @@
 		</div>
 
 		<div class="col-sm-8">
-			<h4>Content</h4>
-			@foreach (var informationKind in Model.InformationKindList)
-			{
-				<div data-informationkind="@informationKind.Key" style="display: none;">
-					@if (informationKind.FreeContent)
+			<div data-role="informationcontent">
+				<h4>Content</h4>
+				@foreach (var informationKind in Model.InformationKindList)
+				{
+					<div data-informationkind="@informationKind.Key" style="display: none;">
+						@if (informationKind.FreeContent)
 					{
 						var elementKey = informationKind.Key + "_FreeContent";
 						var content = GetContent(informationKind.Key, 0, 0);
-						
-						@Html.EditorFor(x => new Dictionary<string, string>() { { elementKey, content } }[elementKey], "wysiwyg")
+
+					@Html.EditorFor(x => new Dictionary<string, string>() { { elementKey, content } }[elementKey], "wysiwyg")
 					}
 
-					@if (informationKind.TabularData)
+						@if (informationKind.TabularData)
 					{
 						var rows = informationKind.TabularDataDefaultRows;
 						if (informationKind.Key == Model.InformationHeader.InformationKindKey
@@ -178,35 +207,47 @@
 							rows = Model.InformationHeader.InformationData.Max(m => m.Row) + 1;
 						}
 
-						<table>
-							@if (informationKind.TabularDataColumns.Any(c => !string.IsNullOrEmpty(c.Title)))
-							{ 
-								<tr>
-									@foreach (var column in informationKind.TabularDataColumns)
-									{
-										<td>
-											@column.Title
-										</td>
-									}
-								</tr>
-							}
-							@for (var i = 0; i < rows; i++)
+					<table>
+						@if (informationKind.TabularDataColumns.Any(c => !string.IsNullOrEmpty(c.Title)))
 							{
-								<tr>
-									@for (var j = 0; j < informationKind.TabularDataColumns.Count; j++)
+							<tr>
+								@foreach (var column in informationKind.TabularDataColumns)
 									{
-										var content = GetContent(informationKind.Key, i, j);										
-
-										<td>
-											@Html.TextBox(@informationKind.Key + "_" + i + "_" + j, content, new { @class = "form-control", data_row = i, data_column = j })
-										</td>
+									<td>
+										@column.Title
+									</td>
 									}
-								</tr>
+							</tr>
 							}
-						</table>
+						@for (var i = 0; i < rows; i++)
+							{
+							<tr>
+								@for (var j = 0; j < informationKind.TabularDataColumns.Count; j++)
+									{
+										var content = GetContent(informationKind.Key, i, j);
+
+									<td>
+										<div class="input-group">
+											@Html.TextBox(@informationKind.Key + "_" + i + "_" + j, content, new { @class = "form-control", data_row = i, data_column = j })
+
+											@switch (informationKind.TabularDataColumns[j].ColumnKind)
+												{
+													case MessageBoard.Core.InformationKind.InformationColumnKind.Image:
+												<span class="input-group-btn">
+													<a href="javascript: void(0);" class="btn btn-default" data-role="image-picker"><span class="glyphicon glyphicon-picture"></span></a>
+												</span>
+														break;
+												}
+										</div>
+									</td>
+									}
+							</tr>
+							}
+					</table>
 					}
-				</div>
-			}
+					</div>
+				}
+			</div>
 		</div>
 	</div>
 }

@@ -44,6 +44,7 @@
     <Compile Include="InformationKind\IInformationRepository.cs" />
     <Compile Include="InformationKind\ImageListInformationKind.cs" />
     <Compile Include="InformationKind\InformationColumn.cs" />
+    <Compile Include="InformationKind\InformationColumnKind.cs" />
     <Compile Include="InformationKind\InformationData.cs" />
     <Compile Include="InformationKind\InformationDataList.cs" />
     <Compile Include="InformationKind\InformationKind.cs" />

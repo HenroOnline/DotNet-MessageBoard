@@ -12,19 +12,15 @@ namespace MessageBoard.Core.InformationKind
 
 		public HorizontalAlignment HorizontalAlignment { get; set; }
 
-		public InformationColumn() : this(string.Empty)
-		{
+		public InformationColumnKind ColumnKind { get; set; }
 
-		}
-
-		public InformationColumn(string title) : this(title, HorizontalAlignment.Left)
-		{
-
-		}
-		public InformationColumn(string title, HorizontalAlignment horizontalAlignment )
-		{
+		public InformationColumn(string title = "", 
+															HorizontalAlignment horizontalAlignment = Core.HorizontalAlignment.Left, 
+															InformationColumnKind informationColumnKind = InformationColumnKind.Text)
+		{			
 			Title = title;
 			HorizontalAlignment = horizontalAlignment;
+			ColumnKind = informationColumnKind;
 		}
 	}
 }

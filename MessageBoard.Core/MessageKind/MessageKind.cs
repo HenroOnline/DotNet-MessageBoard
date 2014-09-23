@@ -31,6 +31,7 @@ namespace MessageBoard.Core.MessageKind
 
 		public abstract List<MessageKindSetting> Settings { get; }
 
+		private static object lockObject = new object();
 		private static List<MessageKind> list;
 		public static List<MessageKind> List
 		{
@@ -38,23 +39,29 @@ namespace MessageBoard.Core.MessageKind
 			{
 				if (list == null)
 				{
-					list = new List<MessageKind>();
-
-					foreach (Assembly assembly in BuildManager.GetReferencedAssemblies())
+					lock (lockObject)
 					{
-						var messageKindBaseType = typeof(MessageKind);
-						foreach (var assemblyType in assembly.GetTypes())
+						if (list == null)
 						{
-							if (!assemblyType.IsAbstract && messageKindBaseType.IsAssignableFrom(assemblyType))
+							var result = new List<MessageKind>();
+
+							foreach (Assembly assembly in BuildManager.GetReferencedAssemblies())
 							{
-								var messageKindInstance = (MessageKind)Activator.CreateInstance(assemblyType);
-								messageKindInstance.Key = messageKindInstance.GetType().ToString();
-								list.Add(messageKindInstance);
+								var messageKindBaseType = typeof(MessageKind);
+								foreach (var assemblyType in assembly.GetTypes())
+								{
+									if (!assemblyType.IsAbstract && messageKindBaseType.IsAssignableFrom(assemblyType))
+									{
+										var messageKindInstance = (MessageKind)Activator.CreateInstance(assemblyType);
+										messageKindInstance.Key = messageKindInstance.GetType().ToString();
+										result.Add(messageKindInstance);
+									}
+								}
 							}
+							result = result.OrderBy(m => m.Title).ToList();
+							list = result;
 						}
 					}
-
-					list = list.OrderBy(m => m.Title).ToList();
 				}
 
 				return list;

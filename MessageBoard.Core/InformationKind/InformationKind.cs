@@ -47,30 +47,39 @@ namespace MessageBoard.Core.InformationKind
 			return string.Empty;
 		}
 
-		private static List<InformationKind> list;
+		private static object lockObject = new object();
+		private static List<InformationKind> list;		
 		public static List<InformationKind> List
 		{
 			get
 			{
 				if (list == null)
 				{
-					list = new List<InformationKind>();
-
-					foreach (Assembly assembly in BuildManager.GetReferencedAssemblies())
+					lock(lockObject)
 					{
-						var informationKindBaseType = typeof(InformationKind);
-						foreach (var assemblyType in assembly.GetTypes())
+						// Double check
+						if (list == null)
 						{
-							if (!assemblyType.IsAbstract && informationKindBaseType.IsAssignableFrom(assemblyType))
+							var result = new List<InformationKind>();
+
+							foreach (Assembly assembly in BuildManager.GetReferencedAssemblies())
 							{
-								var informationKindInstance = (InformationKind)Activator.CreateInstance(assemblyType);
-								informationKindInstance.Key = informationKindInstance.GetType().ToString();
-								list.Add(informationKindInstance);
+								var informationKindBaseType = typeof(InformationKind);
+								foreach (var assemblyType in assembly.GetTypes())
+								{
+									if (!assemblyType.IsAbstract && informationKindBaseType.IsAssignableFrom(assemblyType))
+									{
+										var informationKindInstance = (InformationKind)Activator.CreateInstance(assemblyType);
+										informationKindInstance.Key = informationKindInstance.GetType().ToString();
+										result.Add(informationKindInstance);
+									}
+								}
 							}
+
+							result = result.OrderBy(ik => ik.SortKey).ToList();
+							list = result;
 						}
-					}
-					
-					list = list.OrderBy(ik => ik.SortKey).ToList();
+					}					
 				}
 
 				return list;

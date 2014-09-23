@@ -27,7 +27,11 @@ namespace MessageBoard.Core.InformationKind
 			{
 				var result = new List<InformationColumn>();
 
-				result.Add(new InformationColumn("Afbeelding"));
+				result.Add(new InformationColumn
+					{
+						Title = "Afbeelding",
+						ColumnKind = InformationColumnKind.Image
+					});
 				result.Add(new InformationColumn("Breedte"));
 				result.Add(new InformationColumn("Hoogte"));
 

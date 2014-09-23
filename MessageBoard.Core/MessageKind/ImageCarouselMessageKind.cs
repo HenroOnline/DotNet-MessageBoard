@@ -19,7 +19,8 @@ namespace MessageBoard.Core.MessageKind
 			{
 				return new List<MessageKindSetting>()
 				{
-					MessageKindSetting.Create("InformationHeader", "Afbeeldingen", SettingKind.Information)
+					MessageKindSetting.Create("InformationHeader", "Afbeeldingen", SettingKind.Information),
+					MessageKindSetting.Create("RotationSpeed", "Rotatiesnelheid", SettingKind.Text)
 				};
 			}
 		}
@@ -73,12 +74,13 @@ namespace MessageBoard.Core.MessageKind
 
 										messageBoard.messages.imageCarouselMessageKind.toggleImage(currentVisibleImage, $(availableImages[currentImageIndex]));
 
-										setTimeout(function() { messageBoard.messages.imageCarouselMessageKind.showNextImage(imageCarousel);  }, 5000);
+										var rotationspeed = parseInt(imageCarousel.attr('data-rotationspeed')) * 1000;
+
+										setTimeout(function() { messageBoard.messages.imageCarouselMessageKind.showNextImage(imageCarousel);  }, rotationspeed);
 									},
 
 									toggleImage: function(imageToHide, imageToShow)
-									{										
-										console.log(imageToHide);
+									{
 										if (imageToHide != undefined && imageToHide != null && imageToHide.length > 0)
 										{
 											imageToHide.fadeToggle('slow', 'linear', function () {
@@ -109,6 +111,14 @@ namespace MessageBoard.Core.MessageKind
 				return string.Empty;
 			}
 
+			var rotationSpeedSetting = settings["RotationSpeed"];
+			// Default of 30 seconds
+			var rotationSpeed = 30;
+			if (rotationSpeedSetting != null && rotationSpeedSetting.IntValue > 0)
+			{
+				rotationSpeed = rotationSpeedSetting.IntValue;
+			}			
+
 			var informationData = informationRepository.RetrieveData(informationHeaderSetting.IntValue);
 			var informationHTML = informationKind.RenderHTML(informationData);
 
@@ -117,7 +127,7 @@ namespace MessageBoard.Core.MessageKind
 				return string.Empty;
 			}
 
-			return string.Format("<div data-role=\"MessageBoard.Core.MessageKind.ImageCarouselMessageKind\" data-id=\"{0}\">{1}</div>", messageId, informationHTML);
+			return string.Format("<div data-role=\"MessageBoard.Core.MessageKind.ImageCarouselMessageKind\" data-id=\"{0}\" data-rotationspeed=\"{2}\">{1}</div>", messageId, informationHTML, rotationSpeed);
 		}
 	}
 }
