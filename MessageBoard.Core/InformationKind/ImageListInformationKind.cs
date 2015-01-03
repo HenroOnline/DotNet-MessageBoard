@@ -34,6 +34,7 @@ namespace MessageBoard.Core.InformationKind
 					});
 				result.Add(new InformationColumn("Breedte"));
 				result.Add(new InformationColumn("Hoogte"));
+				result.Add(new InformationColumn("Omschrijving"));
 
 				return result;
 			}
