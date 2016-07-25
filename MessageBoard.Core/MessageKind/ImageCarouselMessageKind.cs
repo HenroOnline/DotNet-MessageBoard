@@ -25,7 +25,7 @@ namespace MessageBoard.Core.MessageKind
 			}
 		}
 
-		public override string RenderGlobalScript()
+		public override string RenderGlobalScript(string dataUrl)
 		{
 			return @"messageBoard.messages.imageCarouselMessageKind = messageBoard.messages.imageCarouselMessageKind || 
 								{
@@ -97,7 +97,7 @@ namespace MessageBoard.Core.MessageKind
 								$(function() { messageBoard.messages.imageCarouselMessageKind.init(); } );";
 		}
 
-		public override string RenderHTML(int messageId, MessageKindSettingList settings, InformationKind.IInformationRepository informationRepository)
+		public override string RenderHTML(int messageId, MessageKindSettingList settings, InformationKind.IInformationRepository informationRepository, string dataUrl)
 		{
 			var informationHeaderSetting = settings["InformationHeader"];
 			if (informationHeaderSetting == null || informationHeaderSetting.IntValue == 0)

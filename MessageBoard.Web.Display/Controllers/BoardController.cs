@@ -11,7 +11,7 @@ namespace MessageBoard.Web.Display.Controllers
 	{
 		public ActionResult Index(string key)
 		{
-			var model = IndexViewModel.Create(key, System.Web.HttpContext.Current.Request.Url.AbsolutePath);
+			var model = IndexViewModel.Create(key, System.Web.HttpContext.Current.Request.Url.AbsolutePath, Url);
 			if (model == null)
 			{
 				return RedirectToAction("NoData");

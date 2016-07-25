@@ -24,11 +24,13 @@ namespace MessageBoard.Web.Display.Models.Entities
 
 		public string GlobalScript { get; set; }
 
+		public string Styling { get; set; }
+
 		public string InstanceScript { get; set; }
 		
 		public MvcHtmlString Value { get; set; }
 
-		public static MessageModel Create(Message message)
+		public static MessageModel Create(Message message, UrlHelper urlHelper)
 		{
 			var result = new MessageModel();
 			result.Description = message.Description;
@@ -42,10 +44,13 @@ namespace MessageBoard.Web.Display.Models.Entities
 			{
 				var settings = SettingRepository.Instance.ListAsMessageKindSetting(message.Id);
 
+				var dataUrl = urlHelper.Action("GetData", "Data", new { MessageId = message.Id });
+
 				result.Key = messageKind.Key;
-				result.GlobalScript = messageKind.RenderGlobalScript();
-				result.InstanceScript = messageKind.RenderInstanceScript(message.Id, settings);
-				result.Value = MvcHtmlString.Create(messageKind.RenderHTML(message.Id, settings, InformationDataRepository.Instance));
+				result.GlobalScript = messageKind.RenderGlobalScript(dataUrl);
+				result.Styling = messageKind.RenderStyling();
+				result.InstanceScript = messageKind.RenderInstanceScript(message.Id, settings, dataUrl);
+				result.Value = MvcHtmlString.Create(messageKind.RenderHTML(message.Id, settings, InformationDataRepository.Instance, dataUrl));
 			}
 			return result;
 		}

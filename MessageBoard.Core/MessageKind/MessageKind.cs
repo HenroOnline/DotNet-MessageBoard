@@ -1,6 +1,7 @@
 ﻿using MessageBoard.Core.InformationKind;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,19 +15,29 @@ namespace MessageBoard.Core.MessageKind
 		public string Key { get; internal set; }
 		public abstract string Title { get; }
 
-		public virtual string RenderGlobalScript()
+		public virtual string RenderGlobalScript(string dataUrl)
 		{
 			return string.Empty;
 		}
 
-		public virtual string RenderInstanceScript(int messageId, MessageKindSettingList settings)
+		public virtual string RenderStyling()
 		{
 			return string.Empty;
 		}
 
-		public virtual string RenderHTML(int messageId, MessageKindSettingList settings, IInformationRepository informationRepository)
+		public virtual string RenderInstanceScript(int messageId, MessageKindSettingList settings, string dataUrl)
 		{
 			return string.Empty;
+		}
+
+		public virtual string RenderHTML(int messageId, MessageKindSettingList settings, IInformationRepository informationRepository, string dataUrl)
+		{
+			return string.Empty;
+		}
+
+		public virtual object GetData(int messageId, MessageKindSettingList settings, NameValueCollection additionalData)
+		{
+			return null;
 		}
 
 		public abstract List<MessageKindSetting> Settings { get; }

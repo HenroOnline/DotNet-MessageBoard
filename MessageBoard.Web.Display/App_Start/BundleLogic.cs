@@ -22,6 +22,8 @@ namespace MessageBoard.Web.Display.App_Start
 			styleBundle.Include("~/Content/site.css");
 
 			bundles.Add(styleBundle);
+
+			BundleTable.EnableOptimizations = false;
 		}
 	}
 }

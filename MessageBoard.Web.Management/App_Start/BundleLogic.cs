@@ -10,7 +10,7 @@ namespace MessageBoard.Web.Management.App_Start
 	{
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			var scriptBundle = new ScriptBundle("~/Scripts");
+			var scriptBundle = new ScriptBundle("~/ScriptBundle");
 
 			scriptBundle.Include("~/Scripts/Libraries/jquery-2.1.1.min.js");
 			scriptBundle.Include("~/Scripts/Libraries/bootstrap.min.js");
@@ -27,13 +27,15 @@ namespace MessageBoard.Web.Management.App_Start
 			
 			bundles.Add(scriptBundle);
 
-			var styleBundle = new StyleBundle("~/Content/css");
+			var styleBundle = new StyleBundle("~/ContentCss");
 			styleBundle.Include("~/Content/bootstrap.min.css");
 			styleBundle.Include("~/Content/bootstrap-theme.min.css");
 			styleBundle.Include("~/Content/jquery.fancybox.css");
 			styleBundle.Include("~/Content/site.css");
 			
 			bundles.Add(styleBundle);
+
+			BundleTable.EnableOptimizations = false;
 		}
 	}
 }

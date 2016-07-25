@@ -26,7 +26,7 @@ namespace MessageBoard.Core.MessageKind
 			}
 		}
 
-		public override string RenderHTML(int messageId, MessageKindSettingList settings, IInformationRepository informationRepository)
+		public override string RenderHTML(int messageId, MessageKindSettingList settings, IInformationRepository informationRepository, string dataUrl)
 		{
 			var informationHeaderSetting = settings["InformationHeader"];
 			if (informationHeaderSetting == null || informationHeaderSetting.IntValue == 0)

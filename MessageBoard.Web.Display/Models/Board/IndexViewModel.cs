@@ -22,11 +22,13 @@ namespace MessageBoard.Web.Display.Models.Board
 
 		public string DisplayBaseUrl { get; set; }
 
+		public MvcHtmlString Styling { get; set; }
+
 		public MvcHtmlString GlobalScripts { get; set; }
 
 		public MvcHtmlString InstanceScripts { get; set; }
 		
-		public static IndexViewModel Create(string key, string path)
+		public static IndexViewModel Create(string key, string path, UrlHelper urlHelper)
 		{
 			var board = BoardRepository.Instance.SelectByKey(key);
 			if (board == null)
@@ -39,7 +41,7 @@ namespace MessageBoard.Web.Display.Models.Board
 			result.Slides = new List<SlideModel>();
 			foreach (var bs in BoardSlideRepository.Instance.ListByBoard(board.Id))
 			{
-				result.Slides.Add(SlideModel.Create(bs));
+				result.Slides.Add(SlideModel.Create(bs, urlHelper));
 			}
 
 			if (result.Slides.Any())
@@ -55,7 +57,8 @@ namespace MessageBoard.Web.Display.Models.Board
 			result.DisplayBaseUrl = path;
 
 
-			// Retrieve all scripts
+			// Retrieve all scripts and styling
+			var styling = new Dictionary<string, string>();
 			var instanceScripts = new StringBuilder();
 			var globalScripts = new Dictionary<string, string>();
 			foreach (var m in result.Slides.SelectMany(s => s.Layers.SelectMany(l => l.Messages)))
@@ -66,6 +69,11 @@ namespace MessageBoard.Web.Display.Models.Board
 				{
 					globalScripts.Add(m.Key, m.GlobalScript);
 				}
+
+				if (!string.IsNullOrWhiteSpace(m.Styling) && !styling.ContainsKey(m.Key))
+				{
+					styling.Add(m.Key, m.Styling);
+				}
 			}
 
 			result.InstanceScripts = new MvcHtmlString(instanceScripts.ToString());
@@ -73,6 +81,11 @@ namespace MessageBoard.Web.Display.Models.Board
 			if (globalScripts.Values.Any())
 			{
 				result.GlobalScripts = new MvcHtmlString(globalScripts.Values.Aggregate((s1, s2) => s1 + s2));
+			}
+
+			if (styling.Values.Any())
+			{
+				result.Styling = new MvcHtmlString(styling.Values.Aggregate((s1, s2) => s1 + s2));
 			}
 			
 			return result;

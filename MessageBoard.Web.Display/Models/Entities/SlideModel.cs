@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MessageBoard.Web.Display.Models.Entities
 {
@@ -15,7 +16,7 @@ namespace MessageBoard.Web.Display.Models.Entities
 
 		public int Duration { get; set; }
 
-		public static SlideModel Create(BoardSlide boardSlide)
+		public static SlideModel Create(BoardSlide boardSlide, UrlHelper urlHelper)
 		{
 			var result = new SlideModel();
 			result.Layers = new List<LayerModel>();
@@ -23,7 +24,7 @@ namespace MessageBoard.Web.Display.Models.Entities
 
 			foreach (var layer in LayerRepository.Instance.ListBySlide(boardSlide.Slide.Id))
 			{
-				result.Layers.Add(LayerModel.Create(layer));
+				result.Layers.Add(LayerModel.Create(layer, urlHelper));
 			}
 
 			return result;

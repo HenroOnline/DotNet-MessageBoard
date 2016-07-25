@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MessageBoard.Web.Display.Models.Entities
 {
@@ -17,7 +18,7 @@ namespace MessageBoard.Web.Display.Models.Entities
 
 		public List<MessageModel> Messages { get; set; }
 
-		public static LayerModel Create(Layer layer)
+		public static LayerModel Create(Layer layer, UrlHelper urlHelper)
 		{
 			var result = new LayerModel();
 
@@ -28,7 +29,7 @@ namespace MessageBoard.Web.Display.Models.Entities
 
 			foreach (var message in MessageRepository.Instance.ListByLayer(layer.Id))
 			{
-				result.Messages.Add(MessageModel.Create(message));			
+				result.Messages.Add(MessageModel.Create(message, urlHelper));			
 			}
 
 			return result;			
