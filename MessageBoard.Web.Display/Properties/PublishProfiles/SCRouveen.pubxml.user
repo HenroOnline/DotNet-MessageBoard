@@ -10,109 +10,112 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
-      <publishTime>04/16/2014 21:00:18</publishTime>
+      <publishTime>07/25/2016 21:57:10</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>04/23/2014 18:26:07</publishTime>
+      <publishTime>07/25/2016 21:57:15</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>04/23/2014 18:26:07</publishTime>
+      <publishTime>07/25/2016 21:57:15</publishTime>
     </File>
     <File Include="bin/MessageBoard.BLL.dll">
-      <publishTime>06/29/2016 21:00:30</publishTime>
+      <publishTime>07/25/2016 22:21:14</publishTime>
     </File>
     <File Include="bin/MessageBoard.Core.dll">
-      <publishTime>06/29/2016 21:00:29</publishTime>
+      <publishTime>07/25/2016 21:57:41</publishTime>
     </File>
     <File Include="bin/MessageBoard.DAL.dll">
-      <publishTime>06/29/2016 21:00:29</publishTime>
+      <publishTime>07/25/2016 22:21:13</publishTime>
     </File>
     <File Include="bin/MessageBoard.HervormdRouveen.dll">
-      <publishTime>06/29/2016 21:00:29</publishTime>
+      <publishTime>07/25/2016 21:57:41</publishTime>
+    </File>
+    <File Include="bin/MessageBoard.SCRouveen.dll">
+      <publishTime>07/28/2016 20:57:21</publishTime>
     </File>
     <File Include="bin/MessageBoard.Web.Display.dll">
-      <publishTime>06/30/2016 20:37:50</publishTime>
+      <publishTime>07/28/2016 20:57:22</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
-      <publishTime>04/23/2014 18:26:08</publishTime>
+      <publishTime>07/25/2016 21:57:17</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.EntityFramework.dll">
-      <publishTime>04/23/2014 18:26:08</publishTime>
+      <publishTime>07/25/2016 21:57:18</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Owin.dll">
-      <publishTime>04/23/2014 18:26:08</publishTime>
+      <publishTime>07/25/2016 21:57:19</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.SignalR.Core.dll">
-      <publishTime>08/17/2014 13:38:51</publishTime>
+      <publishTime>07/25/2016 21:57:36</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.SignalR.SystemWeb.dll">
-      <publishTime>08/17/2014 13:38:51</publishTime>
+      <publishTime>07/25/2016 21:57:37</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Cors.dll">
-      <publishTime>08/17/2014 16:18:01</publishTime>
+      <publishTime>07/25/2016 21:57:38</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.dll">
-      <publishTime>08/17/2014 16:05:48</publishTime>
+      <publishTime>07/25/2016 21:57:38</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Host.SystemWeb.dll">
-      <publishTime>08/17/2014 13:38:51</publishTime>
+      <publishTime>07/25/2016 21:57:38</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.Cookies.dll">
-      <publishTime>04/23/2014 18:26:09</publishTime>
+      <publishTime>07/25/2016 21:57:27</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.dll">
-      <publishTime>08/17/2014 13:38:51</publishTime>
+      <publishTime>07/25/2016 21:57:38</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.Facebook.dll">
-      <publishTime>04/23/2014 18:26:09</publishTime>
+      <publishTime>07/25/2016 21:57:28</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.Google.dll">
-      <publishTime>04/23/2014 18:26:09</publishTime>
+      <publishTime>07/25/2016 21:57:29</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.MicrosoftAccount.dll">
-      <publishTime>04/23/2014 18:26:09</publishTime>
+      <publishTime>07/25/2016 21:57:30</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.OAuth.dll">
-      <publishTime>04/23/2014 18:26:09</publishTime>
+      <publishTime>07/25/2016 21:57:30</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.Twitter.dll">
-      <publishTime>04/23/2014 18:26:09</publishTime>
+      <publishTime>07/25/2016 21:57:31</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:32</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>06/04/2014 17:20:38</publishTime>
+      <publishTime>07/25/2016 21:57:38</publishTime>
     </File>
     <File Include="bin/Owin.dll">
-      <publishTime>04/23/2014 18:26:08</publishTime>
+      <publishTime>07/25/2016 21:57:34</publishTime>
     </File>
     <File Include="bin/System.Web.Cors.dll">
-      <publishTime>08/17/2014 16:05:49</publishTime>
+      <publishTime>07/25/2016 21:57:36</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:23</publishTime>
     </File>
     <File Include="bin/System.Web.Mvc.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:20</publishTime>
     </File>
     <File Include="bin/System.Web.Optimization.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:21</publishTime>
     </File>
     <File Include="bin/System.Web.Razor.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:21</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Deployment.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:23</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:23</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Razor.dll">
-      <publishTime>04/16/2014 21:00:17</publishTime>
+      <publishTime>07/25/2016 21:57:23</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
-      <publishTime>04/16/2014 21:00:18</publishTime>
+      <publishTime>07/25/2016 21:57:35</publishTime>
     </File>
     <File Include="Content/bootstrap-theme.css">
       <publishTime>07/08/2014 20:10:31</publishTime>
@@ -132,8 +135,23 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="favicon.ico">
       <publishTime>04/23/2014 18:26:05</publishTime>
     </File>
+    <File Include="fonts/glyphicons-halflings-regular.eot">
+      <publishTime>04/23/2014 18:26:05</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.svg">
+      <publishTime>04/23/2014 18:26:05</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>04/23/2014 18:26:05</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.woff">
+      <publishTime>04/23/2014 18:26:05</publishTime>
+    </File>
     <File Include="Global.asax">
       <publishTime>04/23/2014 18:26:05</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>07/25/2016 22:17:35</publishTime>
     </File>
     <File Include="Scripts/jquery-2.1.1.js">
       <publishTime>07/15/2014 19:38:39</publishTime>
@@ -154,19 +172,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/14/2014 20:12:06</publishTime>
     </File>
     <File Include="Scripts/_references.js">
-      <publishTime>09/14/2014 18:34:25</publishTime>
+      <publishTime>07/25/2016 22:16:12</publishTime>
     </File>
     <File Include="Views/Board/Index.cshtml">
-      <publishTime>09/14/2014 20:10:25</publishTime>
+      <publishTime>07/24/2016 21:29:36</publishTime>
     </File>
     <File Include="Views/Board/NoData.cshtml">
-      <publishTime>06/29/2016 20:02:48</publishTime>
+      <publishTime>07/24/2016 21:25:31</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>04/23/2014 18:26:07</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>08/17/2014 18:31:46</publishTime>
+      <publishTime>07/24/2016 21:25:19</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>04/23/2014 18:26:05</publishTime>
@@ -175,7 +193,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/23/2014 18:26:05</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/30/2016 20:37:50</publishTime>
+      <publishTime>07/25/2016 22:21:15</publishTime>
     </File>
   </ItemGroup>
 </Project>

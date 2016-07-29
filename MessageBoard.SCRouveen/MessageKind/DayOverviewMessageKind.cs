@@ -75,16 +75,35 @@ namespace MessageBoard.SCRouveen.MessageKind
 								.SCRouveenDayOverview {
 									display: flex;				
 									flex-wrap: wrap;
+									font-size: x-large;
 								}
 
 								.SCRouveenDayOverview .item { 
 									border-radius: 25px;
-									background-color: #FFF; 
+									background-color: rgba(255, 255, 255, 0.80); 
 									margin: 10px; 
+									border: 1px solid #008347;
 									float: left;
 								}
+
+								.SCRouveenDayOverview .item.six {
+									width: 300px;
+								}
+
+								.SCRouveenDayOverview .item.five {
+									width: 364px;
+								}
+
+								.SCRouveenDayOverview .item.four {
+									width: 460px;
+								}
+
+								.SCRouveenDayOverview .item.three {
+									width: 620px;
+								}
+
 								.SCRouveenDayOverview .header {
-									border-radius: 15px 15px 0px 0px;
+									border-radius: 25px 15px 0px 0px;
 									padding-left: 10px;
 									padding-right: 10px;
 									color: #FFF;
@@ -138,12 +157,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 								.SCRouveenDayOverview .spacer { 
 									height: 15px;
-								}
-
-							 .SCRouveenDayOverview img {
-									max-width: 68px;
-									max-height: 68px;
-							 }";
+								}";
 		}
 
 		public override string RenderGlobalScript(string dataUrl)
@@ -168,22 +182,47 @@ namespace MessageBoard.SCRouveen.MessageKind
 									var messageContainer = $('[data-role=""messageContainer""][data-value=""' + messageId + '""]');
 									
 									var renderedHtml = '';
-									for (var i = 0; i < data.length; i++)
+									var matchCount = data.length;
+									var itemCss = '';
+
+									if (matchCount > 0)
 									{
-										var itemHtml = '<div class=""item"">\
-																			<div class=""header""><div class=""time"">' + data[i].Time + '</div><div class=""field"">' + data[i].Field + '</div><p /></div>\
-																			<div class=""dataContainer"">\
-																				<div class=""homeClub""><div class=""logo""><img src=""' + data[i].HomeClubLogo + '"" alt="""" /></div><div class=""data"">' + data[i].HomeClub + '<br/>KK: ' + data[i].HomeClubDressingRoom + '</div><p /></div>\
-																				<div class=""guestClub""><div class=""logo""><img src=""' + data[i].GuestClubLogo + '"" alt="""" /></div><div class=""data"">' + data[i].GuestClub + '<br/>KK: ' + data[i].GuestClubDressingRoom + '</div><p /></div>\
-																				<div>Scheidsrechter: ' + data[i].Referee + '</div>\
-																			</div>\
+										if (matchCount > 15)
+										{
+											itemCss = 'six';
+										} else if (matchCount > 12)
+										{
+											itemCss = 'five';
+										} else if (matchCount > 9)
+										{
+											itemCss = 'four';
+										} else {
+											itemCss = 'three';
+										}
+
+										for (var i = 0; i < matchCount; i++)
+										{
+											var itemHtml = '<div class=""item ' + itemCss + '"">\
+																				<div class=""header""><div class=""time"">' + data[i].Time + '</div><div class=""field"">' + data[i].Field + '</div><p /></div>\
+																				<div class=""dataContainer"">\
+																					<div class=""homeClub""><div class=""logo""></div><div class=""data""><strong>' + data[i].HomeClub + '</strong><br/>' + data[i].HomeClubDressingRoom + '</div><p /></div>\
+																					<div class=""guestClub""><div class=""logo""></div><div class=""data""><strong>' + data[i].GuestClub + '</strong><br/>' + data[i].GuestClubDressingRoom + '</div><p /></div>\
+																					<div>Official: ' + data[i].Referee + '</div>\
+																					<div>Uitslag: ' + data[i].Result + '</div>\
+																				</div>\
+																			</div>';
+											renderedHtml += itemHtml;
+										}
+									} else {
+										renderedHtml = '<div class=""item"">\
+																		<div class=""header"">Geen programma bekend</div>\
+																		<div class=""dataContainer"">Er is geen programma bekend</div>\
 																		</div>';
-										renderedHtml += itemHtml;
 									}
 
 									messageContainer.html(renderedHtml);
 									var currentDate = new Date(); 
-									var currentDateAsString = currentDate.getDate() + '-' + (currentDate.getMonth()+1) + '-' + currentDate.getFullYear() + ' ' + currentDate.getHours() + ':' + currentDate.getMinutes();
+									var currentDateAsString = currentDate.getDate() + '-' + (currentDate.getMonth()+1) + '-' + currentDate.getFullYear() + ' ' + ('00' + currentDate.getHours()).slice(-2) + ':' + ('00' + currentDate.getMinutes()).slice(-2);
 
 									$('[data-role=""messageContainerHeaderTime""]').html(currentDateAsString);
 
@@ -270,20 +309,36 @@ namespace MessageBoard.SCRouveen.MessageKind
 						time = string.Format("{0}:{1}", time.Substring(0, 2), time.Substring(2));
 					}
 				}
+
+				var matchResult = "";
+				var puntenTeam1 = (string)match.PuntenTeam1;
+				var puntenTeam2 = (string)match.PuntenTeam2;
+				if (!string.IsNullOrEmpty(puntenTeam1) && !string.IsNullOrEmpty(puntenTeam2))
+				{
+					matchResult = string.Format("{0} - {1}", puntenTeam1, puntenTeam2);
+				}
+
+				var referee = (string)match.Scheidsrechter;
+				if (!string.IsNullOrEmpty((string)match.Kleedkamer_official))
+				{
+					var glue = string.IsNullOrEmpty(referee) ? "" : ", ";
+					referee = string.Concat(referee, glue, match.Kleedkamer_official);
+				}
 				
 				result.Add(new
 					{
 						Time = time,
 						HomeClub = match.ThuisClub,
 						HomeClubLogo = match.ThuisLogo,
-						HomeClubDressingRoom = match.Kleedkamer_thuis,
+						HomeClubDressingRoom = !string.IsNullOrEmpty((string)match.Kleedkamer_thuis) ? match.Kleedkamer_thuis : "Kleedkamer: -",
 						GuestClub = match.UitClub,
 						GuestClubLogo = match.UitLogo,
-						GuestClubDressingRoom  = match.Kleedkamer_uit,
-						Referee = match.Scheidsrechter,
-						RefereeDressingRoom = match.Kleedkamer_official,
-						Field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB
-					});				
+						GuestClubDressingRoom = !string.IsNullOrEmpty((string)match.Kleedkamer_uit) ? match.Kleedkamer_uit : "Kleedkamer: -",
+						Referee = referee,
+						Field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB,
+						Result = matchResult,
+						Remarks = (string)match.Bijzonderheden
+					});
 			}
 
 			return result.OrderBy(m => m.Time)
