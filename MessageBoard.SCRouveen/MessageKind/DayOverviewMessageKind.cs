@@ -61,7 +61,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 		{
 			return @" .SCRouveenDayOverviewHeader {
 									background-color: #008347;
-									border-radius: 25px;	
+									border-radius: 10px;	
 									margin: 10px;
 									padding-left: 10px;
 									color: #fff;
@@ -79,11 +79,30 @@ namespace MessageBoard.SCRouveen.MessageKind
 								}
 
 								.SCRouveenDayOverview .item { 
-									border-radius: 25px;
+									border-radius: 15px 15px 10px 10px;
 									background-color: rgba(255, 255, 255, 0.80); 
 									margin: 10px; 
 									border: 1px solid #008347;
 									float: left;
+									position: relative;
+								}
+
+								.SCRouveenDayOverview .item .cancel
+								{
+									position: absolute;
+									width: 100%;
+									height: 100%;
+									border-radius: 10px;	
+									background-color: rgba(192,192,192,0.5); 
+									color: #FF0000;
+									text-align: center;
+								}
+
+								.SCRouveenDayOverview .item .cancel div
+								{
+									padding-top: 50px;
+									font-size: 150px;
+									font-weight: bold;									
 								}
 
 								.SCRouveenDayOverview .item.six {
@@ -103,7 +122,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 								}
 
 								.SCRouveenDayOverview .header {
-									border-radius: 25px 15px 0px 0px;
+									border-radius: 10px 10px 0px 0px;
 									padding-left: 10px;
 									padding-right: 10px;
 									color: #FFF;
@@ -202,7 +221,14 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 										for (var i = 0; i < matchCount; i++)
 										{
+											var cancelHtml = '';
+											if (data[i].Cancelled)
+											{
+												cancelHtml = '<div class=""cancel""><div>X</div></div>';
+											}
+
 											var itemHtml = '<div class=""item ' + itemCss + '"">\
+																				' + cancelHtml + '\
 																				<div class=""header""><div class=""time"">' + data[i].Time + '</div><div class=""field"">' + data[i].Field + '</div><p /></div>\
 																				<div class=""dataContainer"">\
 																					<div class=""homeClub""><div class=""logo""></div><div class=""data""><strong>' + data[i].HomeClub + '</strong><br/>' + data[i].HomeClubDressingRoom + '</div><p /></div>\
@@ -324,7 +350,41 @@ namespace MessageBoard.SCRouveen.MessageKind
 					var glue = string.IsNullOrEmpty(referee) ? "" : ", ";
 					referee = string.Concat(referee, glue, match.Kleedkamer_official);
 				}
+
+				bool cancelled = false;
+				bool discontinued = false;
+				if (!string.IsNullOrEmpty((string)match.Bijzonderheden))
+				{
+					switch (((string)match.Bijzonderheden).ToUpper())
+					{
+						case "ADO":
+						case "ADB":
+						case "BNO":
+						case "TNO":
+						case "SNO":
+						case "TAS":
+						case "NOB":
+							cancelled = true;
+							break;
+						case "GOB":
+						case "GOT":
+						case "GVS":
+						case "GWO":
+						case "GWT":
+						case "GWW":
+						case "GWVU":
+						case "GSU":
+							discontinued = true;
+							break;
+					}
+				}
+
+				if (discontinued)
+				{
+					matchResult = "Gestaakt";
+				}
 				
+
 				result.Add(new
 					{
 						Time = time,
@@ -337,7 +397,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 						Referee = referee,
 						Field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB,
 						Result = matchResult,
-						Remarks = (string)match.Bijzonderheden
+						Cancelled = cancelled
 					});
 			}
 
@@ -346,3 +406,4 @@ namespace MessageBoard.SCRouveen.MessageKind
 		}
 	}
 }
+
