@@ -357,6 +357,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 				{
 					switch (((string)match.Bijzonderheden).ToUpper())
 					{
+						case "AFG":
 						case "ADO":
 						case "ADB":
 						case "BNO":
