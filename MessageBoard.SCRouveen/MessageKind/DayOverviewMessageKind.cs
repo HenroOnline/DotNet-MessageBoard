@@ -75,7 +75,19 @@ namespace MessageBoard.SCRouveen.MessageKind
 								.SCRouveenDayOverview {
 									display: flex;				
 									flex-wrap: wrap;
-									font-size: x-large;
+									font-size: large;
+								}
+
+								@media (max-width: 1919px) {
+									.SCRouveenDayOverview {
+										font-size: large;
+									}
+								}
+
+								@media (min-width: 1920px) {
+									.SCRouveenDayOverview {
+										font-size: x-large;
+									}
 								}
 
 								.SCRouveenDayOverview .item { 
@@ -85,6 +97,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 									border: 1px solid #008347;
 									float: left;
 									position: relative;
+									overflow: hidden;
 								}
 
 								.SCRouveenDayOverview .item .cancel
@@ -100,25 +113,41 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 								.SCRouveenDayOverview .item .cancel div
 								{
-									padding-top: 50px;
-									font-size: 150px;
-									font-weight: bold;									
+									font-weight: bold;	
+									font-size: 150px;								
+								}
+
+								@media (max-width: 1919px) {
+									.SCRouveenDayOverview .item .cancel div
+									{
+										padding-top: 20px;										
+									}
+								}
+
+								@media (min-width: 1920px) {
+									.SCRouveenDayOverview .item .cancel div
+									{
+										padding-top: 50px;
+									}
 								}
 
 								.SCRouveenDayOverview .item.six {
-									width: 300px;
+									width: calc((100% - 120px) / 6);
 								}
 
 								.SCRouveenDayOverview .item.five {
-									width: 364px;
+									width: calc((100% - 100px) / 5);
+									/*width: 364px;*/
 								}
 
 								.SCRouveenDayOverview .item.four {
-									width: 460px;
+									width: calc((100% - 80px) / 4);
+									/*width: 460px;*/
 								}
 
 								.SCRouveenDayOverview .item.three {
-									width: 620px;
+									width: calc((100% - 80px) / 3);
+									/*width: 620px;*/
 								}
 
 								.SCRouveenDayOverview .header {
@@ -163,6 +192,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 								.SCRouveenDayOverview .homeClub .data { 
 									float: left;
+									word-break: break-all;
 								}
 
 								.SCRouveenDayOverview .guestClub .logo { 
@@ -172,6 +202,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 								.SCRouveenDayOverview .guestClub .data { 
 									float: left;
+									word-break: break-all;
 								}
 
 								.SCRouveenDayOverview .spacer { 
@@ -399,7 +430,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 						Field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB,
 						Result = matchResult,
 						Cancelled = cancelled
-					});
+					});				
 			}
 
 			return result.OrderBy(m => m.Time)
