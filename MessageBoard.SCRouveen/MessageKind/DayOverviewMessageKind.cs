@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MessageBoard.SCRouveen.MessageKind
 {
@@ -65,12 +66,43 @@ namespace MessageBoard.SCRouveen.MessageKind
 									margin: 10px;
 									padding-left: 10px;
 									color: #fff;
+									display: flex;
 								}
 
-								.SCRouveenDayOverviewHeader > div {
-									float: right;
+								.SCRouveenDayOverviewHeader > .greetingTitle {
+									flex:	1;
+									text-align: left;
+								}														
+
+								.SCRouveenDayOverviewHeader > .lastSyncTime {
+									flex:	1;
 									padding-right: 10px;
+									text-align: right;
+									font-size: small;
 								}									
+
+								.SCRouveenDayOverviewHeader > span {	
+									margin: auto;
+									flex: 2;
+									text-align: center;
+								}
+
+								.SCRouveenDayOverviewHeader a {
+									color: rgba(255, 255, 255, 0.30); 
+									font-size: xx-large;
+									margin-left: 10px;
+									margin-right: 10px;
+								}
+
+								.SCRouveenDayOverviewHeader a.currentDay {
+									color: #FFF;
+								}
+
+								.SCRouveenDayOverviewHeader a:hover {
+									text-decoration: none;
+									color: #FFF;
+								}
+								
 
 								.SCRouveenDayOverview {
 									display: flex;				
@@ -227,12 +259,28 @@ namespace MessageBoard.SCRouveen.MessageKind
 									.fail(function() { console.log(arguments); });
 								},
 
+								updateQueryStringParameter: function(uri, key, value) {
+									var re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i');
+									var separator = uri.indexOf('?') !== -1 ? '&' : '?';
+									if (uri.match(re)) {
+										return uri.replace(re, '$1' + key + '=' + value + '$2');
+									}
+									else {
+										return uri + separator + key + '=' + value;
+									}
+								},
+
+								createUrl: function(dateAsString) 
+								{
+									return messageBoard.SCRouveen.DayOverview.updateQueryStringParameter(window.location.href, 'currentDate', dateAsString);
+								},
+
 								renderData: function(messageId, data, dataUrl)
 								{
 									var messageContainer = $('[data-role=""messageContainer""][data-value=""' + messageId + '""]');
 									
 									var renderedHtml = '';
-									var matchCount = data.length;
+									var matchCount = data.HomeMatches.length;
 									var itemCss = '';
 
 									if (matchCount > 0)
@@ -252,20 +300,21 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 										for (var i = 0; i < matchCount; i++)
 										{
+											var homeMatch = data.HomeMatches[i];
 											var cancelHtml = '';
-											if (data[i].Cancelled)
+											if (homeMatch.Cancelled)
 											{
 												cancelHtml = '<div class=""cancel""><div>X</div></div>';
 											}
-
+											
 											var itemHtml = '<div class=""item ' + itemCss + '"">\
 																				' + cancelHtml + '\
-																				<div class=""header""><div class=""time"">' + data[i].Time + '</div><div class=""field"">' + data[i].Field + '</div><p /></div>\
+																				<div class=""header""><div class=""time"">' + homeMatch.Time + '</div><div class=""field"">' + homeMatch.Field + '</div><p /></div>\
 																				<div class=""dataContainer"">\
-																					<div class=""homeClub""><div class=""logo""></div><div class=""data""><strong>' + data[i].HomeClub + '</strong><br/>' + data[i].HomeClubDressingRoom + '</div><p /></div>\
-																					<div class=""guestClub""><div class=""logo""></div><div class=""data""><strong>' + data[i].GuestClub + '</strong><br/>' + data[i].GuestClubDressingRoom + '</div><p /></div>\
-																					<div>Official: ' + data[i].Referee + '</div>\
-																					<div>Uitslag: ' + data[i].Result + '</div>\
+																					<div class=""homeClub""><div class=""logo""></div><div class=""data""><strong>' + homeMatch.HomeClub + '</strong><br/>' + homeMatch.HomeClubDressingRoom + '</div><p /></div>\
+																					<div class=""guestClub""><div class=""logo""></div><div class=""data""><strong>' + homeMatch.GuestClub + '</strong><br/>' + homeMatch.GuestClubDressingRoom + '</div><p /></div>\
+																					<div>Official: ' + homeMatch.Referee + '</div>\
+																					<div>Uitslag: ' + homeMatch.Result + '</div>\
 																				</div>\
 																			</div>';
 											renderedHtml += itemHtml;
@@ -278,10 +327,33 @@ namespace MessageBoard.SCRouveen.MessageKind
 									}
 
 									messageContainer.html(renderedHtml);
+
+									$('[data-role=""matchDate""]').html(data.DateAsString);
+									
 									var currentDate = new Date(); 
 									var currentDateAsString = currentDate.getDate() + '-' + (currentDate.getMonth()+1) + '-' + currentDate.getFullYear() + ' ' + ('00' + currentDate.getHours()).slice(-2) + ':' + ('00' + currentDate.getMinutes()).slice(-2);
 
-									$('[data-role=""messageContainerHeaderTime""]').html(currentDateAsString);
+									$('[data-role=""messageContainerLastSyncTime""]').html(currentDateAsString);
+									$('[data-role=""previousDay""]').click(function()
+									{
+										var newUrl = messageBoard.SCRouveen.DayOverview.createUrl(data.PreviousDate);
+										window.location.href = newUrl;
+										return false;
+									});
+
+									$('[data-role=""currentDay""]').click(function()
+									{
+										var newUrl = messageBoard.SCRouveen.DayOverview.createUrl('');
+										window.location.href = newUrl;
+										return false;
+									});
+
+									$('[data-role=""nextDay""]').click(function()
+									{
+										var newUrl = messageBoard.SCRouveen.DayOverview.createUrl(data.NextDate);
+										window.location.href = newUrl;
+										return false;
+									});
 
 									setTimeout(function(){ messageBoard.SCRouveen.DayOverview.getData(messageId, dataUrl); }, 1000 * 60)
 								}	
@@ -296,7 +368,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 		public override string RenderHTML(int messageId, MessageKindSettingList settings, Core.InformationKind.IInformationRepository informationRepository, string dataUrl)
 		{
-			var html = string.Format("<div><div class=\"SCRouveenDayOverviewHeader\">Welkom bij SC Rouveen! <div data-role=\"messageContainerHeaderTime\"></div></div><div data-role=\"messageContainer\" data-value=\"{0}\" class=\"SCRouveenDayOverview\"></div></div>", messageId);
+			var html = string.Format("<div><div class=\"SCRouveenDayOverviewHeader\"><span class=\"greetingTitle\">Welkom bij SC Rouveen!</span> <span class=\"matchDateTitle\"><a href=\"#\" data-role=\"previousDay\">&#8678;</a><a href=\"#\" data-role=\"currentDay\" class=\"currentDay\">Programma voor <span data-role=\"matchDate\"></span></a><a href=\"#\" data-role=\"nextDay\">&#8680;</a></span><span class=\"lastSyncTime\">Laatst bijgewerkt op:<br/><span data-role=\"messageContainerLastSyncTime\"></span></span></div><div data-role=\"messageContainer\" data-value=\"{0}\" class=\"SCRouveenDayOverview\"></div></div>", messageId);
 
 			return html;
 		}
@@ -433,8 +505,16 @@ namespace MessageBoard.SCRouveen.MessageKind
 					});				
 			}
 
-			return result.OrderBy(m => m.Time)
-					.ThenBy(m => m.HomeClub);
+			return new
+			{
+				Date = currentDate,
+				DateAsString = currentDate.ToString("dddd d MMMM"),
+				HomeMatches = result.OrderBy(m => m.Time)
+					.ThenBy(m => m.HomeClub),
+				AwayMatches = new object(),
+				PreviousDate = currentDate.AddDays(-1).ToString("yyyy-MM-dd"),
+				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd")
+			};
 		}
 	}
 }
