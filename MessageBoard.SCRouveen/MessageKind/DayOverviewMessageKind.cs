@@ -281,6 +281,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 									
 									var renderedHtml = '';
 									var matchCount = data.HomeMatches.length;
+									
 									var itemCss = '';
 
 									if (matchCount > 0)
@@ -373,6 +374,16 @@ namespace MessageBoard.SCRouveen.MessageKind
 			return html;
 		}
 
+		public class Result
+		{
+			public DateTime Date { get; set; }
+			public string DateAsString { get; set; }
+			public List<dynamic> HomeMatches { get; set; }
+			public List<dynamic> AwayMatches { get; set; }
+			public string PreviousDate { get; set; }
+			public string NextDate { get; set; }
+		}
+
 		public override object GetData(int messageId, Core.MessageKind.MessageKindSettingList settings, NameValueCollection additionalData)
 		{
 			int? weekNumber = null;
@@ -398,7 +409,16 @@ namespace MessageBoard.SCRouveen.MessageKind
 			var token = GenerateInitialization();
 			dynamic data = GetScheduleForDate(token, weekNumber);
 
-			var result = new Collection<dynamic>();
+			var currentDateAsString = currentDate.ToString("yyyy-MM-dd");
+			var result = new Result
+			{
+				Date = currentDate,
+				DateAsString = currentDate.ToString("dddd d MMMM"),
+				HomeMatches = new List<dynamic>(),
+				AwayMatches = new List<dynamic>(),
+				PreviousDate = currentDate.AddDays(-1).ToString("yyyy-MM-dd"),
+				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd")
+			};
 
 			if (data.errorcode == 9995)
 			{
@@ -412,8 +432,6 @@ namespace MessageBoard.SCRouveen.MessageKind
 				throw new Exception("Error: " + data.message);
 			}
 
-			var currentDateAsString = currentDate.ToString("yyyy-MM-dd");
-			
 			var facilityId = settings["FacilityId"];
 
 			foreach (dynamic match in data.List)
@@ -423,7 +441,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 					continue;
 				}
 
-				if (facilityId != null	
+				if (facilityId != null
 						&& !string.IsNullOrEmpty(facilityId.StringValue)
 						&& match.Facility_Id != facilityId.StringValue)
 				{
@@ -487,9 +505,8 @@ namespace MessageBoard.SCRouveen.MessageKind
 				{
 					matchResult = "Gestaakt";
 				}
-				
 
-				result.Add(new
+				result.HomeMatches.Add(new
 					{
 						Time = time,
 						HomeClub = match.ThuisClub,
@@ -502,19 +519,14 @@ namespace MessageBoard.SCRouveen.MessageKind
 						Field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB,
 						Result = matchResult,
 						Cancelled = cancelled
-					});				
+					});
 			}
 
-			return new
-			{
-				Date = currentDate,
-				DateAsString = currentDate.ToString("dddd d MMMM"),
-				HomeMatches = result.OrderBy(m => m.Time)
-					.ThenBy(m => m.HomeClub),
-				AwayMatches = new object(),
-				PreviousDate = currentDate.AddDays(-1).ToString("yyyy-MM-dd"),
-				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd")
-			};
+			result.HomeMatches = result.HomeMatches.OrderBy(m => m.Time)
+					.ThenBy(m => m.HomeClub)
+					.ToList();
+
+			return result;
 		}
 	}
 }
