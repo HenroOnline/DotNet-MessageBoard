@@ -25,10 +25,15 @@ namespace MessageBoard.SCRouveen.MessageKind
 			{
 				return new List<MessageKindSetting>()
 				{
-					MessageKindSetting.Create("FacilityId", "Locatie ID", SettingKind.Text)
+					MessageKindSetting.Create("FacilityId", "Locatie ID", SettingKind.Text),
+					MessageKindSetting.Create("ClubNumber", "KNVB Clubnummer", SettingKind.Text)					
 				};
 			}
 		}
+
+		public virtual bool ShowDressingRoom { get { return true; } }
+
+		public virtual bool ShowReferee { get { return true; } }
 
 		protected object GetScheduleForDate(string token, int? weekNumber)
 		{
@@ -224,7 +229,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 								.SCRouveenDayOverview .homeClub .data { 
 									float: left;
-									word-break: break-all;
+									/*word-break: break-all;*/
 								}
 
 								.SCRouveenDayOverview .guestClub .logo { 
@@ -234,7 +239,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 								.SCRouveenDayOverview .guestClub .data { 
 									float: left;
-									word-break: break-all;
+									/*word-break: break-all;*/
 								}
 
 								.SCRouveenDayOverview .spacer { 
@@ -280,7 +285,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 									var messageContainer = $('[data-role=""messageContainer""][data-value=""' + messageId + '""]');
 									
 									var renderedHtml = '';
-									var matchCount = data.HomeMatches.length;
+									var matchCount = data.Matches.length;
 									
 									var itemCss = '';
 
@@ -301,22 +306,45 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 										for (var i = 0; i < matchCount; i++)
 										{
-											var homeMatch = data.HomeMatches[i];
+											var match = data.Matches[i];
 											var cancelHtml = '';
-											if (homeMatch.Cancelled)
+											if (match.Cancelled)
 											{
 												cancelHtml = '<div class=""cancel""><div>X</div></div>';
 											}
 											
 											var itemHtml = '<div class=""item ' + itemCss + '"">\
 																				' + cancelHtml + '\
-																				<div class=""header""><div class=""time"">' + homeMatch.Time + '</div><div class=""field"">' + homeMatch.Field + '</div><p /></div>\
-																				<div class=""dataContainer"">\
-																					<div class=""homeClub""><div class=""logo""></div><div class=""data""><strong>' + homeMatch.HomeClub + '</strong><br/>' + homeMatch.HomeClubDressingRoom + '</div><p /></div>\
-																					<div class=""guestClub""><div class=""logo""></div><div class=""data""><strong>' + homeMatch.GuestClub + '</strong><br/>' + homeMatch.GuestClubDressingRoom + '</div><p /></div>\
-																					<div>Official: ' + homeMatch.Referee + '</div>\
-																					<div>Uitslag: ' + homeMatch.Result + '</div>\
-																				</div>\
+																				<div class=""header""><div class=""time"">' + match.Time + '</div><div class=""field"">' + match.Field + '</div><p /></div>\
+																				<div class=""dataContainer"">';
+											
+											itemHtml += '<div class=""homeClub""><div class=""logo""></div><div class=""data""><strong>' + match.HomeClub + '</strong>';
+											if (data.ShowDressingRoom && match.Result == '')
+											{
+												itemHtml += '<br/>' + match.HomeClubDressingRoom;
+											}
+											itemHtml += '</div><p /></div>';
+
+											itemHtml += '<div class=""guestClub""><div class=""logo""></div><div class=""data""><strong>' + match.GuestClub + '</strong>';
+											if (data.ShowDressingRoom && match.Result == '')
+											{
+												itemHtml += '<br/>' + match.GuestClubDressingRoom;
+											}
+											itemHtml += '</div><p /></div>';
+
+											/* When the game is over no need to show the referee. */
+											if (data.ShowReferee && match.Result == '')
+											{
+												itemHtml += '<div>Official: ' + match.Referee + '</div>';
+											}
+	
+											/* When referee is not shown show always the result, otherwise the screen is a little bit empty. */
+											if (match.Result != '' || data.ShowReferee == false)
+											{
+												itemHtml += 	'<div>Uitslag: ' + match.Result + '</div>';
+											}
+														
+											itemHtml += 	'		</div>\
 																			</div>';
 											renderedHtml += itemHtml;
 										}
@@ -378,10 +406,12 @@ namespace MessageBoard.SCRouveen.MessageKind
 		{
 			public DateTime Date { get; set; }
 			public string DateAsString { get; set; }
-			public List<dynamic> HomeMatches { get; set; }
-			public List<dynamic> AwayMatches { get; set; }
+			public List<dynamic> Matches { get; set; }
 			public string PreviousDate { get; set; }
 			public string NextDate { get; set; }
+
+			public bool ShowDressingRoom { get; set; }
+			public bool ShowReferee { get; set; }
 		}
 
 		public override object GetData(int messageId, Core.MessageKind.MessageKindSettingList settings, NameValueCollection additionalData)
@@ -414,10 +444,12 @@ namespace MessageBoard.SCRouveen.MessageKind
 			{
 				Date = currentDate,
 				DateAsString = currentDate.ToString("dddd d MMMM"),
-				HomeMatches = new List<dynamic>(),
-				AwayMatches = new List<dynamic>(),
+				Matches = new List<dynamic>(),
 				PreviousDate = currentDate.AddDays(-1).ToString("yyyy-MM-dd"),
-				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd")
+				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd"),
+
+				ShowDressingRoom = ShowDressingRoom,
+				ShowReferee = ShowReferee
 			};
 
 			if (data.errorcode == 9995)
@@ -433,6 +465,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 			}
 
 			var facilityId = settings["FacilityId"];
+			var clubNumber = settings["ClubNumber"];			
 
 			foreach (dynamic match in data.List)
 			{
@@ -506,7 +539,15 @@ namespace MessageBoard.SCRouveen.MessageKind
 					matchResult = "Gestaakt";
 				}
 
-				result.HomeMatches.Add(new
+				var field = "";
+				if (clubNumber == null // We only show field information for home matches.
+						|| string.IsNullOrEmpty(clubNumber.StringValue)
+						|| clubNumber.StringValue == (string)match.ThuisClubNummer)
+				{
+					field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB;
+				}
+
+				result.Matches.Add(new
 					{
 						Time = time,
 						HomeClub = match.ThuisClub,
@@ -516,13 +557,13 @@ namespace MessageBoard.SCRouveen.MessageKind
 						GuestClubLogo = match.UitLogo,
 						GuestClubDressingRoom = !string.IsNullOrEmpty((string)match.Kleedkamer_uit) ? match.Kleedkamer_uit : "Kleedkamer: -",
 						Referee = referee,
-						Field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB,
+						Field = field,
 						Result = matchResult,
 						Cancelled = cancelled
 					});
 			}
 
-			result.HomeMatches = result.HomeMatches.OrderBy(m => m.Time)
+			result.Matches = result.Matches.OrderBy(m => m.Time)
 					.ThenBy(m => m.HomeClub)
 					.ToList();
 
