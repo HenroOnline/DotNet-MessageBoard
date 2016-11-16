@@ -19,21 +19,26 @@ namespace MessageBoard.SCRouveen.MessageKind
 			get { return "KNVB Dag programma"; }
 		}
 
+		private const string SettingKeyFacilityId = "FacilityId";
+		private const string SettingKeyShowHomeMatches = "ShowHomeMatches";
+		private const string SettingKeyShowAwayMatches = "ShowAwayMatches";
+		private const string SettingKeyShowDressingRoom = "ShowDressingRoom";
+		private const string SettingKeyShowReferee = "ShowReferee";
+
 		public override List<Core.MessageKind.MessageKindSetting> Settings
 		{
 			get
 			{
 				return new List<MessageKindSetting>()
 				{
-					MessageKindSetting.Create("FacilityId", "Locatie ID", SettingKind.Text),
-					MessageKindSetting.Create("ClubNumber", "KNVB Clubnummer", SettingKind.Text)					
+					MessageKindSetting.Create(SettingKeyFacilityId, "Locatie ID", SettingKind.Text),
+					MessageKindSetting.Create(SettingKeyShowHomeMatches, "Toon thuiswedstrijden", SettingKind.Boolean),
+					MessageKindSetting.Create(SettingKeyShowAwayMatches, "Toon uitwedstrijden", SettingKind.Boolean),
+					MessageKindSetting.Create(SettingKeyShowDressingRoom, "Toon kleedkamer", SettingKind.Boolean),
+					MessageKindSetting.Create(SettingKeyShowReferee, "Toon scheidsrechter", SettingKind.Boolean)					
 				};
 			}
 		}
-
-		public virtual bool ShowDressingRoom { get { return true; } }
-
-		public virtual bool ShowReferee { get { return true; } }
 
 		protected object GetScheduleForDate(string token, int? weekNumber)
 		{
@@ -414,6 +419,17 @@ namespace MessageBoard.SCRouveen.MessageKind
 			public bool ShowReferee { get; set; }
 		}
 
+		private bool GetBooleanValue(Core.MessageKind.MessageKindSettingList settings, string settingKey)
+		{
+			var result = false;
+			var resultSetting = settings[settingKey];
+			if (resultSetting != null)
+			{
+				result = resultSetting.BooleanValue;
+			}
+			return result;
+		}
+
 		public override object GetData(int messageId, Core.MessageKind.MessageKindSettingList settings, NameValueCollection additionalData)
 		{
 			int? weekNumber = null;
@@ -439,6 +455,11 @@ namespace MessageBoard.SCRouveen.MessageKind
 			var token = GenerateInitialization();
 			dynamic data = GetScheduleForDate(token, weekNumber);
 
+			var showDressingRoom = GetBooleanValue(settings, SettingKeyShowDressingRoom);
+			var showReferee = GetBooleanValue(settings, SettingKeyShowReferee);
+			var showHomeMatches = GetBooleanValue(settings, SettingKeyShowHomeMatches);
+			var showAwayMatches = GetBooleanValue(settings, SettingKeyShowAwayMatches);
+			
 			var currentDateAsString = currentDate.ToString("yyyy-MM-dd");
 			var result = new Result
 			{
@@ -448,8 +469,8 @@ namespace MessageBoard.SCRouveen.MessageKind
 				PreviousDate = currentDate.AddDays(-1).ToString("yyyy-MM-dd"),
 				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd"),
 
-				ShowDressingRoom = ShowDressingRoom,
-				ShowReferee = ShowReferee
+				ShowDressingRoom = showDressingRoom,
+				ShowReferee = showReferee
 			};
 
 			if (data.errorcode == 9995)
@@ -464,9 +485,13 @@ namespace MessageBoard.SCRouveen.MessageKind
 				throw new Exception("Error: " + data.message);
 			}
 
-			var facilityId = settings["FacilityId"];
-			var clubNumber = settings["ClubNumber"];			
-
+			var facilityId = string.Empty;
+			var facilityIdSetting = settings[SettingKeyFacilityId];
+			if (facilityIdSetting != null)
+			{
+				facilityId = facilityIdSetting.StringValue;
+			}
+			
 			foreach (dynamic match in data.List)
 			{
 				if (match.Datum != currentDateAsString)
@@ -474,12 +499,25 @@ namespace MessageBoard.SCRouveen.MessageKind
 					continue;
 				}
 
-				if (facilityId != null
-						&& !string.IsNullOrEmpty(facilityId.StringValue)
-						&& match.Facility_Id != facilityId.StringValue)
+				if (!showHomeMatches && !showAwayMatches)
+				{
+					// Very strange.. Should not happen.
+					continue;
+				}
+
+				var isHomeMatch = match.Facility_Id == facilityId;
+				var isAwayMatch = !isHomeMatch;
+
+				if (isHomeMatch && !showHomeMatches)
+				{
+					continue;					
+				}
+
+				if (isAwayMatch && !showAwayMatches)
 				{
 					continue;
 				}
+				
 
 				var time = (string)match.Tijd;
 				if (!string.IsNullOrEmpty(time))
@@ -540,9 +578,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 				}
 
 				var field = "";
-				if (clubNumber == null // We only show field information for home matches.
-						|| string.IsNullOrEmpty(clubNumber.StringValue)
-						|| clubNumber.StringValue == (string)match.ThuisClubNummer)
+				if (isHomeMatch)
 				{
 					field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB;
 				}

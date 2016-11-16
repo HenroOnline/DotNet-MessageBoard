@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MessageKind\DayOverviewMessageKind.cs" />
-    <Compile Include="MessageKind\DayOverviewMinimalInformationMessageKind.cs" />
     <Compile Include="MessageKind\KNVBDataMessageKind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

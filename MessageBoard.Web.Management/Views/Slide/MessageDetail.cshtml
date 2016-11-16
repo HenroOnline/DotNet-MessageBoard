@@ -85,9 +85,30 @@
 									break;
 								case MessageBoard.Core.SettingKind.FormattedText:
 									@Html.EditorFor(m => m.MessageKindList[i].Settings[j].Value, "wysiwyg", new { @class = "form-control" })
+								break;
+								case MessageBoard.Core.SettingKind.Boolean:
+									{
+										Model.BooleanValuesDropDownList.ForEach(sli => sli.Selected = false);
+										var selectedValue = Model.BooleanValuesDropDownList.FirstOrDefault(sli => sli.Value == Model.MessageKindList[i].Settings[j].Value);
+										if (selectedValue != null)
+										{
+											selectedValue.Selected = true;
+										}
+										@Html.DropDownListFor(m => m.MessageKindList[i].Settings[j].Value, Model.BooleanValuesDropDownList, new { @class = "form-control" })
+									}
+									
 									break;
 								case MessageBoard.Core.SettingKind.Information:
-									@Html.DropDownListFor(m => m.MessageKindList[i].Settings[j].Value, Model.InformationHeaderDropDownList	, new { @class = "form-control" })
+									{
+										Model.InformationHeaderDropDownList.ForEach(sli => sli.Selected = false);
+										var selectedValue = Model.InformationHeaderDropDownList.FirstOrDefault(sli => sli.Value == Model.MessageKindList[i].Settings[j].Value);
+										if (selectedValue != null)
+										{
+											selectedValue.Selected = true;
+										}
+										@Html.DropDownListFor(m => m.MessageKindList[i].Settings[j].Value, Model.InformationHeaderDropDownList	, new { @class = "form-control" })	
+									}
+									
 									break;
 							}
 

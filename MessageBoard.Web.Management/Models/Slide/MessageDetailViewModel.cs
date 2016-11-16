@@ -17,6 +17,8 @@ namespace MessageBoard.Web.Management.Models.Slide
 
 		public List<MessageKindModel> MessageKindList { get; set; }
 
+		public List<SelectListItem> BooleanValuesDropDownList { get; set; }
+
 		public List<SelectListItem> InformationHeaderDropDownList { get; set; }
 
 		public List<InformationHeaderModel> InformationHeaderList { get; set; }
@@ -70,6 +72,11 @@ namespace MessageBoard.Web.Management.Models.Slide
 
 				result.MessageKindList.Add(MessageKindModel.Create(messageKind, dbMessage.Id, messageKind.Key == dbMessage.MessageKind));
 			}
+
+			result.BooleanValuesDropDownList = new List<SelectListItem>();
+			result.BooleanValuesDropDownList.Add(new SelectListItem { Text = string.Empty, Value = string.Empty });
+			result.BooleanValuesDropDownList.Add(new SelectListItem { Text = "Ja", Value = Boolean.TrueString });
+			result.BooleanValuesDropDownList.Add(new SelectListItem { Text = "Nee", Value = Boolean.FalseString });
 
 			result.InformationHeaderDropDownList = new List<SelectListItem>();
 			result.InformationHeaderList = new List<InformationHeaderModel>();

@@ -10,6 +10,7 @@ namespace MessageBoard.Core
 	{
 		Text,
 		FormattedText,
+		Boolean,
 		Information
 	}
 }

@@ -28,6 +28,16 @@ namespace MessageBoard.Core.MessageKind
 			}
 		}
 
+		public bool BooleanValue
+		{
+			get
+			{
+				bool result;
+				bool.TryParse(StringValue, out result);
+				return result;
+			}
+		}
+
 		public int IntValue
 		{
 			get
