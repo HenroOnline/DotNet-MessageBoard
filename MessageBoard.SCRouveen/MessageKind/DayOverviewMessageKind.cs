@@ -20,6 +20,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 		}
 
 		private const string SettingKeyFacilityId = "FacilityId";
+		private const string SettingKeyTitle = "Title";
 		private const string SettingKeyShowHomeMatches = "ShowHomeMatches";
 		private const string SettingKeyShowAwayMatches = "ShowAwayMatches";
 		private const string SettingKeyShowDressingRoom = "ShowDressingRoom";
@@ -32,6 +33,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 				return new List<MessageKindSetting>()
 				{
 					MessageKindSetting.Create(SettingKeyFacilityId, "Locatie ID", SettingKind.Text),
+					MessageKindSetting.Create(SettingKeyTitle, "Titel", SettingKind.Text),
 					MessageKindSetting.Create(SettingKeyShowHomeMatches, "Toon thuiswedstrijden", SettingKind.Boolean),
 					MessageKindSetting.Create(SettingKeyShowAwayMatches, "Toon uitwedstrijden", SettingKind.Boolean),
 					MessageKindSetting.Create(SettingKeyShowDressingRoom, "Toon kleedkamer", SettingKind.Boolean),
@@ -362,7 +364,7 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 									messageContainer.html(renderedHtml);
 
-									$('[data-role=""matchDate""]').html(data.DateAsString);
+									$('[data-role=""matchDate""][data-value=""' + messageId + '""]').html((data.Title + ' ' + data.DateAsString).trim());
 									
 									var currentDate = new Date(); 
 									var currentDateAsString = currentDate.getDate() + '-' + (currentDate.getMonth()+1) + '-' + currentDate.getFullYear() + ' ' + ('00' + currentDate.getHours()).slice(-2) + ':' + ('00' + currentDate.getMinutes()).slice(-2);
@@ -402,13 +404,14 @@ namespace MessageBoard.SCRouveen.MessageKind
 
 		public override string RenderHTML(int messageId, MessageKindSettingList settings, Core.InformationKind.IInformationRepository informationRepository, string dataUrl)
 		{
-			var html = string.Format("<div><div class=\"SCRouveenDayOverviewHeader\"><span class=\"greetingTitle\">Welkom bij SC Rouveen!</span> <span class=\"matchDateTitle\"><a href=\"#\" data-role=\"previousDay\">&#8678;</a><a href=\"#\" data-role=\"currentDay\" class=\"currentDay\">Programma voor <span data-role=\"matchDate\"></span></a><a href=\"#\" data-role=\"nextDay\">&#8680;</a></span><span class=\"lastSyncTime\">Laatst bijgewerkt op:<br/><span data-role=\"messageContainerLastSyncTime\"></span></span></div><div data-role=\"messageContainer\" data-value=\"{0}\" class=\"SCRouveenDayOverview\"></div></div>", messageId);
+			var html = string.Format("<div><div class=\"SCRouveenDayOverviewHeader\"><span class=\"greetingTitle\">Welkom bij SC Rouveen!</span> <span class=\"matchDateTitle\"><a href=\"#\" data-role=\"previousDay\">&#8678;</a><a href=\"#\" data-role=\"currentDay\" class=\"currentDay\"><span data-role=\"matchDate\" data-value=\"{0}\"></span></a><a href=\"#\" data-role=\"nextDay\">&#8680;</a></span><span class=\"lastSyncTime\">Laatst bijgewerkt op:<br/><span data-role=\"messageContainerLastSyncTime\"></span></span></div><div data-role=\"messageContainer\" data-value=\"{0}\" class=\"SCRouveenDayOverview\"></div></div>", messageId);
 
 			return html;
 		}
 
 		public class Result
 		{
+			public string Title { get; set; }
 			public DateTime Date { get; set; }
 			public string DateAsString { get; set; }
 			public List<dynamic> Matches { get; set; }
@@ -427,6 +430,18 @@ namespace MessageBoard.SCRouveen.MessageKind
 			{
 				result = resultSetting.BooleanValue;
 			}
+			return result;
+		}
+
+		private string GetStringValue(Core.MessageKind.MessageKindSettingList settings, string settingKey)
+		{
+			var result = string.Empty;
+			var resultSetting = settings[settingKey];
+			if (resultSetting != null)
+			{
+				result = resultSetting.StringValue;
+			}
+			
 			return result;
 		}
 
@@ -459,12 +474,14 @@ namespace MessageBoard.SCRouveen.MessageKind
 			var showReferee = GetBooleanValue(settings, SettingKeyShowReferee);
 			var showHomeMatches = GetBooleanValue(settings, SettingKeyShowHomeMatches);
 			var showAwayMatches = GetBooleanValue(settings, SettingKeyShowAwayMatches);
-			
+			var title = GetStringValue(settings, SettingKeyTitle);
+
 			var currentDateAsString = currentDate.ToString("yyyy-MM-dd");
 			var result = new Result
 			{
+				Title = title,
 				Date = currentDate,
-				DateAsString = currentDate.ToString("dddd d MMMM"),
+				DateAsString = currentDate.ToString("d MMMM"),
 				Matches = new List<dynamic>(),
 				PreviousDate = currentDate.AddDays(-1).ToString("yyyy-MM-dd"),
 				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd"),
