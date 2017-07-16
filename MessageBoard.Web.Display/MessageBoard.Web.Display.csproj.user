@@ -7,6 +7,7 @@
     <WebStackScaffolding_LayoutPageFile />
     <ProjectView>ProjectFiles</ProjectView>
     <NameOfLastUsedPublishProfile>SCRouveen</NameOfLastUsedPublishProfile>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

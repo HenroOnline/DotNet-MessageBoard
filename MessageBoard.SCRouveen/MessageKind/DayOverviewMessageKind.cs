@@ -14,12 +14,14 @@ namespace MessageBoard.SCRouveen.MessageKind
 {
 	public class DayOverviewMessageKind : KNVBDataMessageKind
 	{
+
+
 		public override string Title
 		{
 			get { return "KNVB Dag programma"; }
 		}
 
-		private const string SettingKeyFacilityId = "FacilityId";
+		private const string SettingKeyHomeFacilityDescription = "HomeFacilityDescription";
 		private const string SettingKeyTitle = "Title";
 		private const string SettingKeyShowHomeMatches = "ShowHomeMatches";
 		private const string SettingKeyShowAwayMatches = "ShowAwayMatches";
@@ -32,26 +34,49 @@ namespace MessageBoard.SCRouveen.MessageKind
 			{
 				return new List<MessageKindSetting>()
 				{
-					MessageKindSetting.Create(SettingKeyFacilityId, "Locatie ID", SettingKind.Text),
+					MessageKindSetting.Create(SettingKeyHomeFacilityDescription, "Thuis accommodatie", SettingKind.Text),
 					MessageKindSetting.Create(SettingKeyTitle, "Titel", SettingKind.Text),
 					MessageKindSetting.Create(SettingKeyShowHomeMatches, "Toon thuiswedstrijden", SettingKind.Boolean),
 					MessageKindSetting.Create(SettingKeyShowAwayMatches, "Toon uitwedstrijden", SettingKind.Boolean),
 					MessageKindSetting.Create(SettingKeyShowDressingRoom, "Toon kleedkamer", SettingKind.Boolean),
-					MessageKindSetting.Create(SettingKeyShowReferee, "Toon scheidsrechter", SettingKind.Boolean)					
+					MessageKindSetting.Create(SettingKeyShowReferee, "Toon scheidsrechter", SettingKind.Boolean)
 				};
 			}
 		}
 
-		protected object GetScheduleForDate(string token, int? weekNumber)
+		protected object GetScheduleForDate(int weekOffset)
 		{
 			var query = new NameValueCollection();
 
-			if (weekNumber.HasValue)
-			{
-				query.Add("weeknummer", weekNumber.ToString());
-			}
+			query.Add("weekoffset", weekOffset.ToString());
+			// API is not always reliable when it comes to home and away matches.
+			//query.Add("thuis", showHomeMatches ? KNVBDataMessageKind.BooleanYes : KNVBDataMessageKind.BooleanNo);
+			//query.Add("uit", showAwayMatches ? KNVBDataMessageKind.BooleanYes : KNVBDataMessageKind.BooleanNo);
 
-			var url = GenerateAbsoluteUrl("/wedstrijden", query, token);
+			var url = GenerateAbsoluteUrl("/programma", query);
+			return ExecuteRequest(url);
+		}
+
+		protected object GetResultsForDate(int weekOffset)
+		{
+			var query = new NameValueCollection();
+
+			query.Add("weekoffset", weekOffset.ToString());
+			// API is not always reliable when it comes to home and away matches.
+			//query.Add("thuis", showHomeMatches ? KNVBDataMessageKind.BooleanYes : KNVBDataMessageKind.BooleanNo);
+			//query.Add("uit", showAwayMatches ? KNVBDataMessageKind.BooleanYes : KNVBDataMessageKind.BooleanNo);
+
+			var url = GenerateAbsoluteUrl("/uitslagen", query);
+			return ExecuteRequest(url);
+		}
+
+		protected object GetCancellationsForDate(int weekOffset)
+		{
+			var query = new NameValueCollection();
+
+			query.Add("weekoffset", weekOffset.ToString());
+			
+			var url = GenerateAbsoluteUrl("/afgelastingen", query);
 			return ExecuteRequest(url);
 		}
 
@@ -409,19 +434,6 @@ namespace MessageBoard.SCRouveen.MessageKind
 			return html;
 		}
 
-		public class Result
-		{
-			public string Title { get; set; }
-			public DateTime Date { get; set; }
-			public string DateAsString { get; set; }
-			public List<dynamic> Matches { get; set; }
-			public string PreviousDate { get; set; }
-			public string NextDate { get; set; }
-
-			public bool ShowDressingRoom { get; set; }
-			public bool ShowReferee { get; set; }
-		}
-
 		private bool GetBooleanValue(Core.MessageKind.MessageKindSettingList settings, string settingKey)
 		{
 			var result = false;
@@ -441,15 +453,15 @@ namespace MessageBoard.SCRouveen.MessageKind
 			{
 				result = resultSetting.StringValue;
 			}
-			
+
 			return result;
 		}
 
 		public override object GetData(int messageId, Core.MessageKind.MessageKindSettingList settings, NameValueCollection additionalData)
 		{
-			int? weekNumber = null;
+			int weekOffset = 0;
 			var currentDateOverride = (string)additionalData["currentDate"];
-			var currentDate = DateTime.Now.Date;
+			var dateToShow = DateTime.Now.Date;
 			if (currentDateOverride != null)
 			{
 				try
@@ -457,9 +469,30 @@ namespace MessageBoard.SCRouveen.MessageKind
 					var year = int.Parse(currentDateOverride.Substring(0, 4));
 					var month = int.Parse(currentDateOverride.Substring(5, 2));
 					var day = int.Parse(currentDateOverride.Substring(8, 2));
-					currentDate = new DateTime(year, month, day);
+					dateToShow = new DateTime(year, month, day);
 
-					weekNumber = GetIso8601WeekOfYear(currentDate);
+					if (dateToShow != DateTime.Now.Date)
+					{
+						var calculateWeekOffsetStartDate = DateTime.Now.Date;
+						if (dateToShow > DateTime.Now.Date)
+						{
+							while (calculateWeekOffsetStartDate.AddDays(7) <= dateToShow)
+							{
+								calculateWeekOffsetStartDate = calculateWeekOffsetStartDate.AddDays(7);
+
+								weekOffset += 1;
+							}
+						}
+						else
+						{
+							while (calculateWeekOffsetStartDate >= dateToShow)
+							{
+								calculateWeekOffsetStartDate = calculateWeekOffsetStartDate.AddDays(-7);
+
+								weekOffset -= 1;
+							}
+						}
+					}
 				}
 				catch
 				{
@@ -467,160 +500,236 @@ namespace MessageBoard.SCRouveen.MessageKind
 				}
 			}
 
-			var token = GenerateInitialization();
-			dynamic data = GetScheduleForDate(token, weekNumber);
-
-			var showDressingRoom = GetBooleanValue(settings, SettingKeyShowDressingRoom);
-			var showReferee = GetBooleanValue(settings, SettingKeyShowReferee);
+			var homeFacilityDescription = GetStringValue(settings, SettingKeyHomeFacilityDescription);
 			var showHomeMatches = GetBooleanValue(settings, SettingKeyShowHomeMatches);
 			var showAwayMatches = GetBooleanValue(settings, SettingKeyShowAwayMatches);
+			
+			var showDressingRoom = GetBooleanValue(settings, SettingKeyShowDressingRoom);
+			var showReferee = GetBooleanValue(settings, SettingKeyShowReferee);
+
 			var title = GetStringValue(settings, SettingKeyTitle);
 
-			var currentDateAsString = currentDate.ToString("yyyy-MM-dd");
+			var dateToShowAsString = dateToShow.ToString("yyyy-MM-dd 00:00:00.00");
 			var result = new Result
 			{
 				Title = title,
-				Date = currentDate,
-				DateAsString = currentDate.ToString("d MMMM"),
-				Matches = new List<dynamic>(),
-				PreviousDate = currentDate.AddDays(-1).ToString("yyyy-MM-dd"),
-				NextDate = currentDate.AddDays(1).ToString("yyyy-MM-dd"),
+				Date = dateToShow,
+				DateAsString = dateToShow.ToString("d MMMM"),
+				Matches = new List<Match>(),
+				PreviousDate = dateToShow.AddDays(-1).ToString("yyyy-MM-dd"),
+				NextDate = dateToShow.AddDays(1).ToString("yyyy-MM-dd"),
 
 				ShowDressingRoom = showDressingRoom,
 				ShowReferee = showReferee
 			};
 
-			if (data.errorcode == 9995)
-			{
-				// No data.
-				return result;
-			}
+			var matches = GetMatches(weekOffset, dateToShowAsString, homeFacilityDescription, showHomeMatches, showAwayMatches);
 
-			if (data.errorcode != 1000)
-			{
-				// Error.. No data available.
-				throw new Exception("Error: " + data.message);
-			}
+			UpdateResults(matches, weekOffset, dateToShowAsString, homeFacilityDescription, showHomeMatches, showAwayMatches);
 
-			var facilityId = string.Empty;
-			var facilityIdSetting = settings[SettingKeyFacilityId];
-			if (facilityIdSetting != null)
-			{
-				facilityId = facilityIdSetting.StringValue;
-			}
-			
-			foreach (dynamic match in data.List)
-			{
-				if (match.Datum != currentDateAsString)
-				{
-					continue;
-				}
+			// De response van afgelastingen toon alleen een datum in een display formaat. Bijv. 14 jul.
+			UpdateCancelled(matches, weekOffset, dateToShow.ToString("dd MMM"), homeFacilityDescription, showHomeMatches, showAwayMatches);
 
-				if (!showHomeMatches && !showAwayMatches)
-				{
-					// Very strange.. Should not happen.
-					continue;
-				}
-
-				var isHomeMatch = match.Facility_Id == facilityId;
-				var isAwayMatch = !isHomeMatch;
-
-				if (isHomeMatch && !showHomeMatches)
-				{
-					continue;					
-				}
-
-				if (isAwayMatch && !showAwayMatches)
-				{
-					continue;
-				}
-				
-
-				var time = (string)match.Tijd;
-				if (!string.IsNullOrEmpty(time))
-				{
-					if (time.Length == 4)
-					{
-						time = string.Format("{0}:{1}", time.Substring(0, 2), time.Substring(2));
-					}
-				}
-
-				var matchResult = "";
-				var puntenTeam1 = (string)match.PuntenTeam1;
-				var puntenTeam2 = (string)match.PuntenTeam2;
-				if (!string.IsNullOrEmpty(puntenTeam1) && !string.IsNullOrEmpty(puntenTeam2))
-				{
-					matchResult = string.Format("{0} - {1}", puntenTeam1, puntenTeam2);
-				}
-
-				var referee = (string)match.Scheidsrechter;
-				if (!string.IsNullOrEmpty((string)match.Kleedkamer_official))
-				{
-					var glue = string.IsNullOrEmpty(referee) ? "" : ", ";
-					referee = string.Concat(referee, glue, match.Kleedkamer_official);
-				}
-
-				bool cancelled = false;
-				bool discontinued = false;
-				if (!string.IsNullOrEmpty((string)match.Bijzonderheden))
-				{
-					switch (((string)match.Bijzonderheden).ToUpper())
-					{
-						case "AFG":
-						case "ADO":
-						case "ADB":
-						case "BNO":
-						case "TNO":
-						case "SNO":
-						case "TAS":
-						case "NOB":
-							cancelled = true;
-							break;
-						case "GOB":
-						case "GOT":
-						case "GVS":
-						case "GWO":
-						case "GWT":
-						case "GWW":
-						case "GWVU":
-						case "GSU":
-							discontinued = true;
-							break;
-					}
-				}
-
-				if (discontinued)
-				{
-					matchResult = "Gestaakt";
-				}
-
-				var field = "";
-				if (isHomeMatch)
-				{
-					field = !string.IsNullOrEmpty((string)match.VeldClub) ? match.VeldClub : match.VeldKNVB;
-				}
-
-				result.Matches.Add(new
-					{
-						Time = time,
-						HomeClub = match.ThuisClub,
-						HomeClubLogo = match.ThuisLogo,
-						HomeClubDressingRoom = !string.IsNullOrEmpty((string)match.Kleedkamer_thuis) ? match.Kleedkamer_thuis : "Kleedkamer: -",
-						GuestClub = match.UitClub,
-						GuestClubLogo = match.UitLogo,
-						GuestClubDressingRoom = !string.IsNullOrEmpty((string)match.Kleedkamer_uit) ? match.Kleedkamer_uit : "Kleedkamer: -",
-						Referee = referee,
-						Field = field,
-						Result = matchResult,
-						Cancelled = cancelled
-					});
-			}
-
-			result.Matches = result.Matches.OrderBy(m => m.Time)
+			result.Matches = matches.OrderBy(m => m.Time)
 					.ThenBy(m => m.HomeClub)
 					.ToList();
 
 			return result;
+		}
+
+		public List<Match> GetMatches(int weekOffset, 
+			string dateAsString,
+			string homeFacilityDescription,
+			bool showHomeMatches, 
+			bool showAwayMatches)
+		{
+			var result = new List<Match>();
+			dynamic data = GetScheduleForDate(weekOffset);
+			foreach (dynamic match in data)
+			{
+				if (match.kaledatum != dateAsString)
+				{
+					continue;
+				}
+
+				// API is not always reliable when it comes to home and away matches.
+				var isHomeMatch = string.Equals((string)match.accommodatie, homeFacilityDescription, StringComparison.InvariantCultureIgnoreCase);
+
+				if (isHomeMatch && showHomeMatches == false)
+				{
+					continue;
+				}
+
+				if (!isHomeMatch && showAwayMatches == false)
+				{
+					continue;
+				}
+
+				var time = (string)match.aanvangstijd;
+
+				var referee = (string)match.scheidsrechter;
+				if (!string.IsNullOrEmpty((string)match.kleedkamerscheidsrechter))
+				{
+					var glue = string.IsNullOrEmpty(referee) ? "" : ", ";
+					referee = string.Concat(referee, glue, match.kleedkamerscheidsrechter);
+				}
+				var field = string.Empty;
+				if (isHomeMatch)
+				{
+					field = (string)match.veld;
+				}
+
+				result.Add(new Match
+				{
+					MatchId = match.wedstrijdcode,
+					Time = time,
+					HomeClub = match.thuisteam,
+					HomeClubDressingRoom = !string.IsNullOrEmpty((string)match.kleedkamerthuisteam) ? match.kleedkamerthuisteam : "Kleedkamer: -",
+					GuestClub = match.uitteam,
+					GuestClubDressingRoom = !string.IsNullOrEmpty((string)match.kleedkameruitteam) ? match.kleedkameruitteam : "Kleedkamer: -",
+					Referee = referee,
+					Field = field,
+					Result = string.Empty
+				});
+			}
+
+			return result;
+		}
+
+		private void UpdateResults(List<Match> matches, 
+			int weekOffset,
+			string dateAsString,
+			string homeFacilityDescription,
+			bool showHomeMatches,
+			bool showAwayMatches)
+		{
+			dynamic data = GetResultsForDate(weekOffset);
+
+			var addedMatches = new List<Match>();
+			foreach (dynamic matchResult in data)
+			{
+				// API is not always reliable when it comes to home and away matches.
+				var isHomeMatch = string.Equals((string)matchResult.accommodatie, homeFacilityDescription, StringComparison.InvariantCultureIgnoreCase);
+
+				if (isHomeMatch && showHomeMatches == false)
+				{
+					continue;
+				}
+
+				if (!isHomeMatch && showAwayMatches == false)
+				{
+					continue;
+				}
+
+				int wedstrijdCode = matchResult.wedstrijdcode;
+				var match = matches.FirstOrDefault(m => m.MatchId == wedstrijdCode);
+				if (match == null && matchResult.datum == dateAsString)
+				{
+					match = new Match
+					{
+						MatchId = wedstrijdCode,
+						Time = matchResult.aanvangstijd,
+						HomeClub = matchResult.thuisteam,
+						GuestClub = matchResult.uitteam
+					};
+					addedMatches.Add(match);
+				}
+
+				if (match == null)
+				{
+					continue;
+				}
+
+				match.Result = matchResult.uitslag;
+			}
+
+			matches.AddRange(addedMatches);
+		}
+
+		private void UpdateCancelled(List<Match> matches,
+			int weekOffset,
+			string dateAsString,
+			string homeFacilityDescription,
+			bool showHomeMatches,
+			bool showAwayMatches)
+		{
+			dynamic data = GetCancellationsForDate(weekOffset);
+
+			var addedMatches = new List<Match>();
+			foreach (dynamic cancelledMatch in data)
+			{
+				var isHomeMatch = string.Equals((string)cancelledMatch.accommodatie, homeFacilityDescription, StringComparison.InvariantCultureIgnoreCase);
+
+				if (isHomeMatch && showHomeMatches == false)
+				{
+					continue;
+				}
+
+				if (!isHomeMatch && showAwayMatches == false)
+				{
+					continue;
+				}
+
+				int wedstrijdCode = cancelledMatch.wedstrijdcode;
+				var match = matches.FirstOrDefault(m => m.MatchId == wedstrijdCode);
+				if (match == null && string.Equals(cancelledMatch.datum, dateAsString, StringComparison.InvariantCultureIgnoreCase))
+				{
+					match = new Match
+					{
+						MatchId = wedstrijdCode,
+						Time = cancelledMatch.aanvangstijd,
+						HomeClub = cancelledMatch.thuisteam,
+						GuestClub = cancelledMatch.uitteam
+					};
+					addedMatches.Add(match);
+				}
+
+				if (match == null)
+				{
+					continue;
+				}
+
+				match.Cancelled = true;
+			}
+
+			matches.AddRange(addedMatches);
+		}
+
+		public class Result
+		{
+			public string Title { get; set; }
+			public DateTime Date { get; set; }
+			public string DateAsString { get; set; }
+			public List<Match> Matches { get; set; }
+			public string PreviousDate { get; set; }
+			public string NextDate { get; set; }
+
+			public bool ShowDressingRoom { get; set; }
+			public bool ShowReferee { get; set; }
+		}
+
+		public class Match
+		{
+			public Match()
+			{
+				Referee = string.Empty;
+				Time = string.Empty;
+				HomeClubDressingRoom = string.Empty;
+				GuestClubDressingRoom = string.Empty;
+				Field = string.Empty;
+				Result = string.Empty;
+			}
+			
+			public int MatchId { get; set; }
+			public string Time { get; set; }
+			public string HomeClub { get; set; }
+			public string HomeClubDressingRoom { get; set; }
+			public string GuestClub { get; set; }
+			public string GuestClubDressingRoom { get; set; }
+			public string Referee { get; set; }
+			public string Field { get; set; }
+			public string Result { get; set; }
+			public bool Cancelled { get; set; }
 		}
 	}
 }

@@ -14,36 +14,31 @@ namespace MessageBoard.SCRouveen.MessageKind
 {
 	public abstract class KNVBDataMessageKind : Core.MessageKind.MessageKind
 	{
-		private readonly string _pathName;
-		private readonly string _apiKey;
+		public const string BooleanYes = "JA";
+		public const string BooleanNo = "NEE";
+
+		private readonly string _apiClientId;
 
 		protected KNVBDataMessageKind()
 		{
-			_pathName = "scrouveen";
-			_apiKey = "XYIFHe4WKXrQHt9";
+			_apiClientId = "LBh05irDly";
 		}
 
 		protected string GenerateAbsoluteUrl(string path)
 		{
-			return GenerateAbsoluteUrl(path, null, string.Empty);
+			return GenerateAbsoluteUrl(path, null);
 		}
 
-		protected string GenerateAbsoluteUrl(string path, NameValueCollection query, string token)
+		protected string GenerateAbsoluteUrl(string path, NameValueCollection query)
 		{
-			var url = string.Concat("http://api.knvbdataservice.nl/api", path);
+			var url = string.Concat("https://data.sportlink.com", path);
 
 			if (query == null)
 			{
 				query = new NameValueCollection();
 			}
 
-			if (!string.IsNullOrEmpty(token))
-			{
-				query.Add("PHPSESSID", token);
-
-				var hash = GenerateHash(string.Concat("#", path, "#"), token);
-				query.Add("hash", hash);
-			}
+			query.Add("clientId", _apiClientId);			
 
 			if (query.Count > 0)
 			{
@@ -51,37 +46,6 @@ namespace MessageBoard.SCRouveen.MessageKind
 			}
 
 			return url;
-		}
-
-		protected string GenerateInitialization()
-		{
-			var url = GenerateAbsoluteUrl(string.Concat("/initialisatie/", _pathName));
-
-			dynamic data = ExecuteRequest(url);
-			string result = data.List[0].PHPSESSID;
-			return result;
-		}
-
-		private string CalculateMD5Hash(string input)
-		{
-			// step 1, calculate MD5 hash from input
-			MD5 md5 = System.Security.Cryptography.MD5.Create();
-			byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-			byte[] hash = md5.ComputeHash(inputBytes);
-
-			// step 2, convert byte array to hex string
-			var sb = new StringBuilder();
-			for (int i = 0; i < hash.Length; i++)
-			{
-				sb.Append(hash[i].ToString("x2"));
-			}
-
-			return sb.ToString();
-		}
-
-		private string GenerateHash(string hashKey, string token)
-		{
-			return CalculateMD5Hash(string.Concat(_apiKey, hashKey, token));
 		}
 
 		private string GenerateQueryString(NameValueCollection nvc)
